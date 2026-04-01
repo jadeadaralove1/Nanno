@@ -9,7 +9,6 @@ global.sessionName = 'Sessions/Owner'
 global.version = '^2.0 - Latest'
 global.dev = "Love With By Adara"
 global.links = {
-api: 'https://api.stellarwa.xyz',
 github: "https://github.com/jadeadaralove1/Nanno",
 }
 settings.whatsappChannel ??= 'https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A?source=bot'

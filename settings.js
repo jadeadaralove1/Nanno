@@ -12,7 +12,10 @@ global.links = {
 github: "https://github.com/jadeadaralove1/Nanno",
 }
 global.settings = global.settings || {};
-global.settings.whatsappChannel ??= 'https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A?source=bot';
+export const settings = {
+  whatsappChannel: 'https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A?source=bot'
+};
+
 global.my = {
 ch: '120363374826926142@newsletter',
 name: 'NANNOBOT',

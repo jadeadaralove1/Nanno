@@ -25,10 +25,10 @@ export default {
       const namebot = botSettings.namebot || '';
       const banner = botSettings.banner || '';
       const owner = botSettings.owner || '';
-      const canalId = botSettings.id || '';
-      const canalName = botSettings.nameid || '';
-      const prefix = botSettings.prefix;
-      const link = botSettings.link || links.api.channel;
+     const canalId = global.my.ch;           // tu newsletter actual
+const canalName = global.my.name;       // nombre visible del canal
+const prefix = botSettings.prefix;    // esto puedes dejar igual si solo quieres el prefijo
+const link = settings.whatsappChannel || 'https://wa.me/';  // tu nuevo canal
       const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net';
       const botType = isOficialBot ? 'Principal/Owner' : 'Sub Bot';
       const users = Object.keys(global.db.data.users).length;

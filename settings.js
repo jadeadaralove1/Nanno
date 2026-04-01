@@ -20,7 +20,7 @@ const settings = {
 
 export default settings;
 global.my = {
-ch: '120363374826926142@newsletter',
+ch: '0029VbBvrmwC1Fu5SYpbBE2A@newsletter',
 name: 'NANNOBOT',
 }
 

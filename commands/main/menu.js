@@ -4,6 +4,7 @@ import fs from 'fs';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import { bodyMenu, menuObject } from '../../lib/commands.js';
+import { settings } from '../../settings.js'; // <-- Importa settings aquí
 
 function normalize(text = '') {
   text = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
@@ -19,22 +20,26 @@ export default {
       const colombianTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
       const tiempo = colombianTime.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/,/g, '');
       const tempo = moment.tz('America/Caracas').format('hh:mm A');
+
       const botId = client?.user?.id.split(':')[0] + '@s.whatsapp.net';
       const botSettings = global.db.data.settings[botId] || {};
       const botname = botSettings.botname || '';
       const namebot = botSettings.namebot || '';
       const banner = botSettings.banner || '';
       const owner = botSettings.owner || '';
-     const canalId = global.my.ch;           // tu newsletter actual
-const canalName = global.my.name;       // nombre visible del canal
-const prefix = botSettings.prefix;    // esto puedes dejar igual si solo quieres el prefijo
-const link = settings.whatsappChannel || 'https://wa.me/';  // tu nuevo canal
+
+      const canalId = global.my.ch;       // tu newsletter actual
+      const canalName = global.my.name;   // nombre visible del canal
+      const prefix = botSettings.prefix;  // prefijo del bot
+      const link = settings.whatsappChannel || 'https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A'; // <-- tu link nuevo
+
       const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net';
       const botType = isOficialBot ? 'Principal/Owner' : 'Sub Bot';
       const users = Object.keys(global.db.data.users).length;
       const device = getDevice(m.key.id);
       const sender = global.db.data.users[m.sender].name;
       const time = client.uptime ? formatearMs(Date.now() - client.uptime) : "Desconocido";
+
       const alias = {
         anime: ['anime', 'reacciones'],
         downloads: ['downloads', 'descargas'],
@@ -44,15 +49,19 @@ const link = settings.whatsappChannel || 'https://wa.me/';  // tu nuevo canal
         sockets: ['sockets', 'bots'],
         utils: ['utils', 'utilidades', 'herramientas']
       };
+
       const input = normalize(args[0] || '');
       const cat = Object.keys(alias).find(k => alias[k].map(normalize).includes(input));
-      const category = `${cat ? ` para \`${cat}\`` : '. *(˶ᵔ ᵕ ᵔ˶)*'}`
-      if (args[0] && !cat) {      
+      const category = `${cat ? ` para \`${cat}\`` : '. *(˶ᵔ ᵕ ᵔ˶)*'}`;
+
+      if (args[0] && !cat) {
         return m.reply(`𐄹 ۪ ׁ 🥀ᩚ̼ 𖹭̫ ▎ La categoria *${args[0]}* no existe, las categorias disponibles son: *${Object.keys(alias).join(', ')}*.\n> Para ver la lista completa escribe *${usedPrefix}menu*\n> Para ver los comandos de una categoría escribe *${usedPrefix}menu [categoría]*\n> Ejemplo: *${usedPrefix}menu anime*`);
       }
+
       const sections = menuObject;
       const content = cat ? String(sections[cat] || '') : Object.values(sections).map(s => String(s || '')).join('\n\n');
-      let menu = bodyMenu ? String(bodyMenu || '') + '\n\n' + content : content;
+      let menu = bodyMenu ? String(bodyMenu) + '\n\n' + content : content;
+
       const replacements = {
         $owner: owner ? (!isNaN(owner.replace(/@s\.whatsapp\.net$/, '')) ? global.db.data.users[owner]?.name || owner.split('@')[0] : owner) : 'Oculto por privacidad',
         $botType: botType,
@@ -68,45 +77,48 @@ const link = settings.whatsappChannel || 'https://wa.me/';  // tu nuevo canal
         $prefix: usedPrefix,
         $uptime: time
       };
+
       for (const [key, value] of Object.entries(replacements)) {
         menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);
       }
-        await client.sendMessage(m.chat, banner.includes('.mp4') || banner.includes('.webm') ? {
-            video: { url: banner },
-            gifPlayback: true,
-            caption: menu,
-            contextInfo: {
-              mentionedJid: [m.sender],
-              isForwarded: true,
-              forwardedNewsletterMessageInfo: {
-                newsletterJid: canalId,
-                serverMessageId: '',
-                newsletterName: canalName
-              }
-            }
-          } : {
-            text: menu,
-            contextInfo: {
-              mentionedJid: [m.sender],
-              isForwarded: true,
-              forwardedNewsletterMessageInfo: {
-                newsletterJid: canalId,
-                serverMessageId: '',
-                newsletterName: canalName
-              },
-              externalAdReply: {
-                title: botname,
-                body: `${namebot}, Love With By Adara `,
-                showAdAttribution: false,
-                thumbnailUrl: banner,
-                mediaType: 1,
-                previewType: 0,
-                renderLargerThumbnail: true
-              }
-            }
-          }, { quoted: m });
+
+      await client.sendMessage(m.chat, banner.includes('.mp4') || banner.includes('.webm') ? {
+        video: { url: banner },
+        gifPlayback: true,
+        caption: menu,
+        contextInfo: {
+          mentionedJid: [m.sender],
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: canalId,
+            serverMessageId: '',
+            newsletterName: canalName
+          }
+        }
+      } : {
+        text: menu,
+        contextInfo: {
+          mentionedJid: [m.sender],
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: canalId,
+            serverMessageId: '',
+            newsletterName: canalName
+          },
+          externalAdReply: {
+            title: botname,
+            body: `${namebot}, Love With By Adara `,
+            showAdAttribution: false,
+            thumbnailUrl: banner,
+            mediaType: 1,
+            previewType: 0,
+            renderLargerThumbnail: true
+          }
+        }
+      }, { quoted: m });
+
     } catch (e) {
-      await m.reply(`> An unexpected error occurred while executing command *${usedPrefix + command}*. Please try again or contact support if the issue persists.\n> [Error: *${e.message}*]`)
+      await m.reply(`> An unexpected error occurred while executing command *${usedPrefix + command}*. Please try again or contact support if the issue persists.\n> [Error: *${e.message}*]`);
     }
   }
 };

@@ -4,7 +4,7 @@ import fs from 'fs';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import { bodyMenu, menuObject } from '../../lib/commands.js';
-import { settings } from '../../settings.js'; // <-- Importa settings aquí
+import settings from '../../settings.js';
 
 function normalize(text = '') {
   text = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');

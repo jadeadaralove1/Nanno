@@ -12,6 +12,7 @@ global.links = {
 api: 'https://api.stellarwa.xyz',
 github: "https://github.com/jadeadaralove1/Nanno",
 }
+global.whatsappChannel = "https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A?source=bot";
 global.my = {
 ch: '120363374826926142@newsletter',
 name: 'NANNOBOT',

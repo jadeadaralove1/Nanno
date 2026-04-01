@@ -11,11 +11,14 @@ global.dev = "Love With By Adara"
 global.links = {
 github: "https://github.com/jadeadaralove1/Nanno",
 }
+// settings.js
 global.settings = global.settings || {};
-export const settings = {
+
+const settings = {
   whatsappChannel: 'https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A?source=bot'
 };
 
+export default settings;
 global.my = {
 ch: '120363374826926142@newsletter',
 name: 'NANNOBOT',

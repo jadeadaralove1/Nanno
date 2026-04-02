@@ -11,7 +11,7 @@ global.dev = "Love With By Adara"
 global.links = {
 api: 'https://api.stellarwa.xyz',
 channel: "https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A",
-github: "https://github.com/jadeadaralove1/Nanno-bot",
+github: "https://github.com/jadeadaralove1/Nanno",
 }
 global.my = {
 ch: '120363406529946290@newsletter',

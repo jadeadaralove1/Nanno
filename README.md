@@ -14,7 +14,6 @@
 
 #### ⛃𝆆ㅤㅤ╱ㅤㅤ𝗚𝗶𝗿𝗹 𝗙𝗿𝗼𝗺 𝗡𝗼𝘄𝗵𝗲𝗿𝗲ㅤㅤㅤ𝆶ㅤㅤ📼ㅤㅤ❜
 
-> [!IMPORTANT]
 > Un bot inspirado en Nanno (interpretada por Kitty), la chica que siempre sabe lo que pasa y no se detiene ante nada.
 
 > Todos tienen el sueño de tener una hermosa vida en este mundo gris, pero toda moneda tiene dos caras. Es extraño cómo algunos siguen creyendo que los humanos somos nobles animales con lados buenos, y se rehúsan a creer que tenemos lados oscuros.
@@ -66,7 +65,7 @@ Nanno?
 nanno1
 ```
 
-
+</details>
 ---
 
 ### 💐 Propietario

@@ -12,4 +12,6 @@
 > Nanno esta creada en base a otros bots, al igual que demitra me base en muchos bots. 
 
 
-#### ⛃𝆆ㅤㅤ╱ㅤㅤ𝗗𝗶𝘀𝗽𝗼𝗻𝗶𝗯𝗹𝗲ㅤㅤㅤ𝆶ㅤㅤ📼ㅤㅤ❜
+#### ⛃𝆆ㅤㅤ╱ㅤㅤ𝗚𝗶𝗿𝗹 𝗙𝗿𝗼𝗺 𝗡𝗼𝘄𝗵𝗲𝗿𝗲ㅤㅤㅤ𝆶ㅤㅤ📼ㅤㅤ❜
+
+> Un bot inspirado en Nanno (interpretada por Kitty), la chica que siempre sabe lo que pasa y no se detiene ante nada.

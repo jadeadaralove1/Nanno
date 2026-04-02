@@ -71,7 +71,7 @@ export default {
       message = pickRandom(neutralMessages)
     }
     user.lastfish = Date.now() + 8 * 60 * 1000
-    await client.sendMessage(m.chat, { text: `「✿」 ${message}` }, { quoted: m })
+    await client.sendMessage(m.chat, { text: `▟༌   ᩠🪙⃢ ᪶⛶  ${message}` }, { quoted: m })
   },
 }
 

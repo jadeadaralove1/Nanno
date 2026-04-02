@@ -2,4 +2,4 @@
 Bot de whatsapp!!!!!! 
 
 
-<img src="https://media.tenor.com/bXaVrAAAACAAAA.gif" width="35"/>
+<img src="https://s6.ezgif.com/tmp/ezgif-6da2f731789e69c4.gif" width="35"/>

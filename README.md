@@ -1,1 +1,1 @@
-<img src="https://media.tenor.com/lK7y4-31P6kAAAAi/border-dollcore.gif" width="200"/>
+<img src="https://media.tenor.com/lK7y4-31P6kAAAAi/border-dollcore.gif" width="400"/>

@@ -60,24 +60,25 @@ export default {
       const { min, xp } = xpRange(nivel, global.multiplier)
       const progreso = exp - min
       const porcentaje = xp > 0 ? Math.floor((progreso / xp) * 100) : 0
-      const profileText = `「✿」 *Perfil* ◢ ${name} ◤
-⸙ ${desc}
+      const profileText = `ꥑ𐨿⚡⃝᳝۠     ꢶ ꢶ ꢶ  𝗡𝗔𝗡𝗡𝗢 𝗣𝗘𝗥𝗙𝗜𝗟 ꢶ ꢶ   🪡⃧     ้ ແ 
+${name} 
+> ${desc}
 
-╭─ ❖ Información ❖
+╭─  𝗜nformación 
 │ Cumpleaños  › *${birth}*
 │ Pasatiempo  › *${pasatiempo}*
 │ Género      › *${genero}*
 │ ${estadoCivil} › *${pareja}*
 ╰─────────────
 
-╭─ ❖ Progreso ❖
+╭─  𝗣rogreso 
 │ Nivel       › *${nivel}*
 │ Experiencia › *${exp.toLocaleString()}*
 │ Progreso    › *${progreso} => ${xp}* _(${porcentaje}%)_
 │ Puesto      › *#${rank}*
 ╰─────────────
 
-╭─ Harem & Coins 
+╭─   𝗖oins 
 │ Coins totales › *¥${totalCoins.toLocaleString()} ${currency}*
 │ Comandos      › *${comandos.toLocaleString()}*
 ╰─────────────`

@@ -18,4 +18,4 @@
 
 > Todos tienen el sueño de tener una hermosa vida en este mundo gris, pero toda moneda tiene dos caras. Es extraño cómo algunos siguen creyendo que los humanos somos nobles animales con lados buenos, y se rehúsan a creer que tenemos lados oscuros.
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Arial&duration=15000&pause=500&color=FF4500&center=true&vCenter=true&width=700&height=140&lines=Todos+tienen+el+sue%C3%B1o+de+tener+una+hermosa+vida+en+este+mundo+gris.&lines=Pero+toda+moneda+tiene+dos+caras.&lines=Es+extra%C3%B1o+como+algunos+sigen+creyendo+que+los+humanos+somos+nobles+animales+con+lados+buenos.&lines=Y+se+reusan+a+creer+que+tenemos+lados+oscuros." alt="Typing SVG" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Arial&size=40&duration=6000&pause=500&color=FF4500&center=true&vCenter=true&width=800&height=100&lines=%C2%BFQu%C3%A9+puede+comprar+el+dinero%3F" alt="Typing SVG" />

@@ -17,7 +17,7 @@ respóndele o menciónalo.
     const ownerBot = global.owner[0][0] + '@s.whatsapp.net'
     const participant = groupInfo.participants.find((p) => p.phoneNumber === user || p.jid === user || p.id === user || p.lid === user)
     if (!participant) {
-      return client.reply(m.chat, `《✧》 *@${user.split('@')[0]}* ya no está en el grupo.`, m, { mentions: [user] })
+      return client.reply(m.chat, `𐄹 ۪ ׁ 💉ᩚ̼ 𖹭̫ ▎ *@${user.split('@')[0]}* ya no está en el grupo.`, m, { mentions: [user] })
     }
     if (user === client.decodeJid(client.user.id)) {
       return m.reply(`𐄹 ۪ ׁ 💉ᩚ̼ 𖹭̫ ▎¿Eliminarme… a mí? JAJAJA. 

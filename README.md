@@ -33,6 +33,7 @@
 > **Este proyecto está en constante evolución. Estamos comprometidos en ofrecer a nuestra comunidad un Bot increíble. Te invitamos a instalarlo y para estar al tanto de todas las novedades. [¡Únete a nuestro nuevo canal!](https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A)**
 
 <p align="center"> 
+
 <img src="https://s8.ezgif.com/tmp/ezgif-850df3e3824c4957.gif" width="400"/>
 
 <p align="center"> 

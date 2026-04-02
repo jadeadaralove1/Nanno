@@ -10,3 +10,5 @@
 <div align="center">
 
 > Nanno esta creada en base a otros bots, al igual que demitra me base en muchos bots. 
+
+###⛃𝆆ㅤㅤ╱ㅤㅤ𝗗𝗶𝘀𝗽𝗼𝗻𝗶𝗯𝗹𝗲ㅤㅤㅤ𝆶ㅤㅤ📼ㅤㅤ❜

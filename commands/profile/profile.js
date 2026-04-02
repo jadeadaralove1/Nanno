@@ -77,9 +77,7 @@ export default {
 │ Puesto      › *#${rank}*
 ╰─────────────
 
-╭─ ❖ Harem & Coins ❖
-│ Harem         › *${haremCount}*
-│ Valor total   › *${haremValue.toLocaleString()}*${favLine}
+╭─ Harem & Coins 
 │ Coins totales › *¥${totalCoins.toLocaleString()} ${currency}*
 │ Comandos      › *${comandos.toLocaleString()}*
 ╰─────────────`

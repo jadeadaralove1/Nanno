@@ -58,10 +58,12 @@
 <details>
 <summary><strong>🍒 </strong> — Shell</summary>
 
-```Nanno? 
+```
+Nanno? 
 ```
 
-```nanno1
+```
+nanno1
 ```
 
 ---

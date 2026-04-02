@@ -27,10 +27,12 @@
   </a>
 </div>
 
-<div align="center">
-
-> [!IMPORTANT]
-> **Este proyecto está en constante evolución. Estamos comprometidos en ofrecer a nuestra comunidad un Bot increíble. Te invitamos a instalarlo y para estar al tanto de todas las novedades. [¡Únete a nuestro nuevo canal!](https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A)**
+<div align="center" style="background-color:#f8d7da; color:#842029; border-radius:8px; padding:15px; margin-bottom:20px;">
+  <strong>Este proyecto está en constante evolución.</strong><br>
+  Estamos comprometidos en ofrecer a nuestra comunidad un Bot increíble. 
+  Te invitamos a instalarlo y para estar al tanto de todas las novedades. 
+  <a href="https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A">¡Únete a nuestro nuevo canal!</a>
+</div>
 
 <p align="center">
   <img src="https://files.catbox.moe/veugwf.jpg" width="400"/>

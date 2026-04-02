@@ -49,7 +49,6 @@
 - Comandos de economia
 - Respuestas automáticas
 - Gestión de grupos
-- Integración con APIs externas
 
 ---
 

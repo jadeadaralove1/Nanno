@@ -36,7 +36,7 @@
 <img src="https://s8.ezgif.com/tmp/ezgif-850df3e3824c4957.gif" width="400"/>
 
 <p align="center"> 
-<a href="#"><img title="Shiina-Mahiru" src="https://img.shields.io/badge/¡Disfruta de un Bot totalmente gratuito, con múltiples funciones y de código abierto! -purple?colorA=%239b33b0&colorB=%231c007b&style=for-the-badge"></a> 
+<a href="#"><img title="Nanno" src="https://img.shields.io/badge/¡Disfruta de un Bot totalmente gratuito, con múltiples funciones y de código abierto! -purple?colorA=%239b33b0&colorB=%231c007b&style=for-the-badge"></a> 
 </p>
 
 ---

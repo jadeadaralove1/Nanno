@@ -29,7 +29,7 @@
 
 
 > [!IMPORTANT]
-> **Este proyecto está en constante evolución. Estamos comprometidos en ofrecer a nuestra comunidad un Bot increíble. Te invitamos a instalarlo y para estar al tanto de todas las novedades. [¡Únete a nuestro nuevo canal!](https://whatsapp.com/channel/0029Vaz6RTR0LKZIKwudX32x)**
+> **Este proyecto está en constante evolución. Estamos comprometidos en ofrecer a nuestra comunidad un Bot increíble. Te invitamos a instalarlo y para estar al tanto de todas las novedades. [¡Únete a nuestro nuevo canal!](https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A)**
 
 <p align="center"> 
 <img src="https://raw.githubusercontent.com/Angelithoxz/Ryusei-Club/main/uploads/1772732220893.jpeg" alt="Mahiru-Shiina" style="width: 75%; height: auto; max-width: 100px;">

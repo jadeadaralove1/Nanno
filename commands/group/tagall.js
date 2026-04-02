@@ -6,19 +6,23 @@ export default {
     const groupInfo = await client.groupMetadata(m.chat)
     const participants = groupInfo.participants
     const pesan = args.join(' ')
-    let teks = `Qué dramático todo, invocar gente como si fueras protagonista de un ritual oscuro… me encanta.
+    let teks = ` ׄ 　۪ 𓂃 ੭୧ Invocación activada… 
 
-“Han sido llamados… ignoren si quieren, pero ya están dentro.”
+Qué dramático todo, invocar gente como si fueras protagonista de un ritual oscuro… me encanta.
+
+> “Han sido llamados… ignoren si quieren, pero ya están dentro.”
+
 
 ${pesan || ''}
 
-𐚁 ֹ ִ \`GROUP TAG\` ! ୧ ֹ ִ🍃
+⌗ꥑּ͘🪪⃟𐨿ּܼ⏤᩠ Grupo: \`GROUP TAG\`
 
-🍄 \`Miembros :\` ${participants.length}
-🌿 \`Solicitado por :\` @${m.sender.split('@')[0]}
+👥 Miembros: ${participants.length}
 
-╭┄ ꒰ \`Lista de usuarios:ׄ\` ꒱ ┄
-`
+📝 Solicitado por: @${m.sender.split('@')[0]}
+
+           𝗟ista de 𝗨suarios  
+`;
     for (const mem of participants) {
       teks += `𐄹 ۪ ׁ 😺ᩚ̼ 𖹭̫ ▎ @${mem.id.split('@')[0]}\n`
     }

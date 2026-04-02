@@ -27,11 +27,10 @@
   </a>
 </div>
 
-<div align="center" style="background-color:#f8d7da; color:#842029; border-radius:8px; padding:15px; margin-bottom:20px;">
-  <strong>Este proyecto está en constante evolución.</strong><br>
-  Estamos comprometidos en ofrecer a nuestra comunidad un Bot increíble. 
-  Te invitamos a instalarlo y para estar al tanto de todas las novedades. 
-  <a href="https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A">¡Únete a nuestro nuevo canal!</a>
+<div align="center" style="background-color:#cce5ff; color:#004085; border-radius:8px; padding:15px; margin-bottom:20px;">
+  <strong>¡Estamos evolucionando constantemente!</strong><br>
+  Nuestro Bot sigue mejorando día a día para ofrecer la mejor experiencia a la comunidad. 
+  Mantente al tanto de todas las novedades y <a href="https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A">únete a nuestro nuevo canal</a>.
 </div>
 
 <p align="center">

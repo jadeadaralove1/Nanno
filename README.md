@@ -56,7 +56,7 @@
 ### Instalaciónes Básicas
 
 <details>
-<summary><strong>🍒 </strong> — Shell</summary>
+<summary><strong>🍒 </strong> — NANNOS</summary>
 
 ```
 Nanno? 

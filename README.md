@@ -9,3 +9,4 @@
 
 <div align="center">
 
+> Nanno esta creada en base a otros bots, al igual que demitra me base en muchos bots. 

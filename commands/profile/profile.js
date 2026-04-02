@@ -62,7 +62,7 @@ export default {
       const porcentaje = xp > 0 ? Math.floor((progreso / xp) * 100) : 0
       const profileText = `ꥑ𐨿
 ⚡⃝᳝۠     ꢶ ꢶ ꢶ  𝗡𝗔𝗡𝗡𝗢 𝗣𝗘𝗥𝗙𝗜𝗟 ꢶ ꢶ   🪡⃧     ้ ແ 
-             ${name} 
+               ${name} 
 > ${desc}
 
 ╭─  𝗜nformación 

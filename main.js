@@ -20,19 +20,21 @@ let body = m.message.conversation || m.message.extendedTextMessage?.text || m.me
 if (!m.fromMem && body) {
 
 const palabras = /(bot|nanno|ia|botsito|lol|:v)/gi
-const random = Math.random() < 0.1 // 10% probabilidad
 
-if (body.match(palabras) || random) {
+// probabilidad random para cualquier mensaje
+const reaccionRandom = Math.random() < 0.05
+
+if (body.match(palabras) || reaccionRandom) {
 
 const emojis = [
 "😺","😸","😹","😻","😼","😽","🙀","😿","😾",
-"🤩","😏","😳","🥵","🤯","😱","😨",
-"🤫","🥴","🤧","🤑","🤠","🤖","🤝","💪","👑",
-"😚","🐱","🐈","🐆","🐅",
-"⚡️","🌈","🌝","🌛","🌜",
+"🥿","😏","😳","🐢","🤯","😱","😨",
+"🤫","🫡","🤧","♠","🦭","🤖","🤝","💪","👑",
+"🐋","🐱","🐈","☠️","💗",
+"⚡️","🧚‍♀️","🫂","🪻","⌛",
 "🍓","🍎","🎈","🪄",
-"❤️","🧡","💛","💚","💙","💜","🖤","🤍",
-"💘","💝","💟","😎","🔥"
+"💤","🌟","💋","👀","🪷","🐝","🐳","🔥",
+"💘","☔","🍫","🥊","🎀"
 ]
 
 const emot = emojis[Math.floor(Math.random() * emojis.length)]

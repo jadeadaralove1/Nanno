@@ -2,7 +2,7 @@ export default {
   command: ['cuentasoficiales'],
   exp: 35,
 
-  run: async (m, { sock }) => {
+  run: async (m, { conn }) => {
 
     const media = 'https://files.catbox.moe/lcn1kw.mp4'
 
@@ -23,7 +23,7 @@ https://chat.whatsapp.com/ETHW7aP7kOICrR2RBrfE6N
 
 🌌 Shadow-BOT-MD`
 
-    await sock.sendMessage(m.chat, {
+    await conn.sendMessage(m.chat, {
       video: { url: media },
       caption: text,
       gifPlayback: true

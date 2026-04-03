@@ -17,29 +17,20 @@ if (!m.message) return
 const sender = m.sender 
 let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
 
-if (body && !m.key.fromMe) {
+if (!m.fromMem && m.text && m.text.match(/(bot|nanno|ia|botsito|lol|:v)/gi)) {
 
-const text = body.toLowerCase()
+let emot = pickRandom([
+"😺","😸","😹","😻","😼","😽","🙀","😿","😾",
+"🤩","😏","😳","🥵","🤯","😱","😨",
+"🤫","🥴","🤧","🤑","🤠","🤖","🤝","💪","👑",
+"😚","🐱","🐈","🐆","🐅",
+"⚡️","🌈","🌝","🌛","🌜",
+"🍓","🍎","🎈","🪄",
+"❤️","🧡","💛","💚","💙","💜","🖤","🤍",
+"💘","💝","💟","😎","🔥"
+])
 
-const palabras = ['bot','nanno','robot','ia']
-
-if (palabras.some(p => text.includes(p))) {
-
-if (Math.random() > 0.5) {
-
-const emojis = ['🤖','👀','✨','😹','🔥','🫠']
-const emoji = emojis[Math.floor(Math.random() * emojis.length)]
-
-await client.sendMessage(m.chat, {
-react: {
-text: emoji,
-key: m.key
-}
-})
-
-}
-
-}
+this.sendMessage(m.chat, { react: { text: emot, key: m.key }})
 
 }
 initDB(m, client)

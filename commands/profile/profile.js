@@ -66,7 +66,6 @@ export default {
 > ${desc}
 
 ╭─  𝗜nformación 
-│ Cumpleaños  › *${birth}*
 │ Pasatiempo  › *${pasatiempo}*
 │ Género      › *${genero}*
 │ ${estadoCivil} › *${pareja}*

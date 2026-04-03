@@ -4,7 +4,7 @@ export default {
 
   run: async (m, ctx) => {
 
-    let media = 'https://files.catbox.moe/lcn1kw.mp4'
+    const media = 'https://files.catbox.moe/lcn1kw.mp4'
 
     let text = `🌑⚔️ 𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊(𝘼) 𝘼 𝙇𝘼𝙎 𝘾𝙐𝙀𝙉𝙏𝘼𝙎 𝙊𝙁𝙄𝘾𝙄𝘼𝙇𝙀𝙎 ⚔️🌑
 💜 𝙒𝙀𝙇𝘾𝙊𝙈𝙀 𝙏𝙊 𝙏𝙃𝙀 𝙊𝙁𝙁𝙄𝘾𝙄𝘼𝙇 𝘼𝘾𝘾𝙊𝙐𝙉𝙏𝙎
@@ -26,8 +26,10 @@ https://chat.whatsapp.com/ETHW7aP7kOICrR2RBrfE6N
 ┈┈┈┈┈┈┈┈┈┈
 🌌✨ *Shadow-BOT-MD* — El jardín sombrío nunca duerme ✨🌌`
 
-    await ctx.reply(text, {
-      media: media
+    await ctx.sendMessage(m.chat, {
+      video: { url: media },
+      caption: text,
+      gifPlayback: true
     })
 
   }

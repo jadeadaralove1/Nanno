@@ -1,6 +1,8 @@
 export default {
   command: ["botones"],
-  run: async (m, { conn }) => {
+  run: async (m, ctx) => {
+
+    const conn = ctx.conn || ctx.client || ctx.sock
 
     await conn.sendMessage(m.chat, {
       text: "Hola soy *Nanno Bot*",
@@ -11,13 +13,6 @@ export default {
           quickReplyButton: {
             displayText: "📜 Menú",
             id: ".menu"
-          }
-        },
-        {
-          index: 2,
-          quickReplyButton: {
-            displayText: "🏓 Ping",
-            id: ".ping"
           }
         }
       ]

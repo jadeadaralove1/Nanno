@@ -1,28 +1,23 @@
 export default {
   command: ["botones"],
-  run: async (m) => {
+  run: async (m, sock) => {
 
-    const conn = m.sock || m.conn
-
-    await conn.sendMessage(m.chat, {
+    await sock.sendMessage(m.chat, {
       text: "Hola soy *Nanno Bot*",
       footer: "Nanno Bot",
-      templateButtons: [
+      buttons: [
         {
-          index: 1,
-          quickReplyButton: {
-            displayText: "📜 Menú",
-            id: ".menu"
-          }
+          buttonId: ".menu",
+          buttonText: { displayText: "📜 Menú" },
+          type: 1
         },
         {
-          index: 2,
-          quickReplyButton: {
-            displayText: "🏓 Ping",
-            id: ".ping"
-          }
+          buttonId: ".ping",
+          buttonText: { displayText: "🏓 Ping" },
+          type: 1
         }
-      ]
+      ],
+      headerType: 1
     }, { quoted: m })
 
   }

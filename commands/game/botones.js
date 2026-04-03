@@ -3,16 +3,24 @@ export default {
   run: async (m, { conn }) => {
 
     await conn.sendMessage(m.chat, {
-      text: "Hola soy Nanno Bot",
+      text: "Hola soy *Nanno Bot*",
       footer: "Nanno Bot",
-      buttons: [
+      templateButtons: [
         {
-          buttonId: ".menu",
-          buttonText: { displayText: "📜 Menú" },
-          type: 1
+          index: 1,
+          quickReplyButton: {
+            displayText: "📜 Menú",
+            id: ".menu"
+          }
+        },
+        {
+          index: 2,
+          quickReplyButton: {
+            displayText: "🏓 Ping",
+            id: ".ping"
+          }
         }
-      ],
-      headerType: 1
+      ]
     }, { quoted: m })
 
   }

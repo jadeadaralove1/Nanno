@@ -17,26 +17,31 @@ if (!m.message) return
 const sender = m.sender 
 let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
 
-// autoreacción del bot
-if (body) {
+if (body && !m.key.fromMe) {
+
 const text = body.toLowerCase()
 
 const palabras = ['bot','nanno','robot','ia']
 
 if (palabras.some(p => text.includes(p))) {
 
-if (Math.random() < 0.5) return // evita spam
+if (Math.random() > 0.5) {
 
 const emojis = ['🤖','👀','✨','😹','🔥','🫠']
 const emoji = emojis[Math.floor(Math.random() * emojis.length)]
 
 await client.sendMessage(m.chat, {
-react: { text: emoji, key: m.key }
+react: {
+text: emoji,
+key: m.key
+}
 })
 
 }
+
 }
 
+}
 initDB(m, client)
 antilink(client, m)
 

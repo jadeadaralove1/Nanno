@@ -2,11 +2,12 @@ export default {
   command: ["botones"],
   run: async (m, ctx) => {
 
-    const conn = ctx.conn || ctx.client || ctx.sock
-
+    const conn = ctx.conn || ctx.sock || ctx.client
     if (!conn) return
 
-    await conn.sendMessage(m.chat, {
+    const jid = m.chat || m.key?.remoteJid
+
+    await conn.sendMessage(jid, {
       text: "Hola soy *Nanno Bot*",
       footer: "Nanno Bot",
       buttons: [

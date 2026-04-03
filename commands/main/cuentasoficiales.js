@@ -15,7 +15,7 @@ export default {
 
     } catch (error) {
       console.error('Error en cuentasoficiales:', error);
-      if (ctx?.conn) { // seguridad extra
+      if (ctx?.conn) {
         await ctx.conn.sendMessage(m.chat, {
           text: '❌ Ocurrió un error al ejecutar el comando.'
         }, { quoted: m });

@@ -26,7 +26,7 @@ https://chat.whatsapp.com/ETHW7aP7kOICrR2RBrfE6N
 ┈┈┈┈┈┈┈┈┈┈
 🌌✨ *Shadow-BOT-MD* — El jardín sombrío nunca duerme ✨🌌`
 
-    await ctx.sendMessage(m.chat, {
+    await ctx.send({
       video: { url: media },
       caption: text,
       gifPlayback: true

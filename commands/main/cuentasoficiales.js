@@ -4,7 +4,10 @@ export default {
   command: ['cuentasoficiales'],
   exp: 35,
 
-  run: async (m, { conn }) => {
+  run: async (m, ctx) => {
+
+    const conn = ctx.conn || ctx.sock
+    if (!conn) return
 
     let text = `🌑⚔️ 𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊(𝘼) 𝘼 𝙇𝘼𝙎 𝘾𝙐𝙀𝙉𝙏𝘼𝙎 𝙊𝙁𝙄𝘾𝙄𝘼𝙇𝙀𝙎 ⚔️🌑
 💜 𝙒𝙀𝙇𝘾𝙊𝙈𝙀 𝙏𝙊 𝙏𝙃𝙀 𝙊𝙁𝙁𝙄𝘾𝙄𝘼𝙇 𝘼𝘾𝘾𝙊𝙐𝙉𝙏𝙎
@@ -30,7 +33,7 @@ https://chat.whatsapp.com/ETHW7aP7kOICrR2RBrfE6N
       video: { url: media },
       caption: text,
       gifPlayback: true
-    })
+    }, { quoted: m })
 
   }
 }

@@ -1,8 +1,11 @@
+// cuentasoficiales.js
+import { sock } from '../lib/connection.js' // Ajusta la ruta según tu proyecto
+
 export default {
   command: ['cuentasoficiales'],
   exp: 35,
 
-  run: async (m, { conn }) => {
+  run: async (m) => {
     try {
       const media = 'https://files.catbox.moe/lcn1kw.mp4'
 
@@ -23,15 +26,17 @@ https://chat.whatsapp.com/ETHW7aP7kOICrR2RBrfE6N
 
 🌌 Shadow-BOT-MD`
 
-      await conn.sendMessage(m.chat, {
-        video: { url: media }, // video o GIF
+      await sock.sendMessage(m.chat, {
+        video: { url: media },
         caption: text,
         gifPlayback: true
       }, { quoted: m })
 
     } catch (error) {
-      console.error('Error en comando cuentasoficiales:', error)
-      await conn.sendMessage(m.chat, { text: '❌ Ocurrió un error al ejecutar el comando.' }, { quoted: m })
+      console.error('Error en cuentasoficiales:', error)
+      await sock.sendMessage(m.chat, {
+        text: '❌ Ocurrió un error al ejecutar el comando.'
+      }, { quoted: m })
     }
   }
 }

@@ -6,28 +6,7 @@ export default {
 
   run: async (m, { conn }) => {
 
-    const wm = (typeof global !== 'undefined' && global.wm) ? global.wm : 'Shadow-BOT-MD ⚔️'
-
-    let fkontak = {
-      key: {
-        participants: '0@s.whatsapp.net',
-        remoteJid: 'status@broadcast',
-        fromMe: false,
-        id: 'Halo'
-      },
-      message: {
-        contactMessage: {
-          vcard: `BEGIN:VCARD
-VERSION:3.0
-N:Sy;Bot;;;
-FN:y
-item1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}
-item1.X-ABLabel:Ponsel
-END:VCARD`
-        }
-      },
-      participant: '0@s.whatsapp.net'
-    }
+    const wm = global.wm || 'Shadow-BOT-MD ⚔️'
 
     let str = `🌑⚔️ 𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊(𝘼) 𝘼 𝙇𝘼𝙎 𝘾𝙐𝙀𝙉𝙏𝘼𝙎 𝙊𝙁𝙄𝘾𝙄𝘼𝙇𝙀𝙎 ⚔️🌑
 💜 𝙒𝙀𝙇𝘾𝙊𝙈𝙀 𝙏𝙊 𝙏𝙃𝙀 𝙊𝙁𝙁𝙄𝘾𝙄𝘼𝙇 𝘼𝘾𝘾𝙊𝙐𝙉𝙏𝙎
@@ -55,12 +34,9 @@ https://chat.whatsapp.com/ETHW7aP7kOICrR2RBrfE6N
       wm,
       media,
       [
-        ['👑 Creadores 💗', '#owner'],
-        ['☘️ Volver al Menú', '/menu']
-      ],
-      null,
-      [],
-      fkontak
+        ['👑 Creadores 💗', '.owner'],
+        ['☘️ Volver al Menú', '.menu']
+      ]
     )
 
   }

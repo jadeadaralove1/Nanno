@@ -17,7 +17,12 @@ if (!m.message) return
 const sender = m.sender 
 let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
 
-if (!m.fromMem && body && body.match(/(bot|nanno|ia|botsito|lol|:v)/gi)) {
+if (!m.fromMem && body) {
+
+const palabras = /(bot|nanno|ia|botsito|lol|:v)/gi
+const random = Math.random() < 0.1 // 10% probabilidad
+
+if (body.match(palabras) || random) {
 
 const emojis = [
 "😺","😸","😹","😻","😼","😽","🙀","😿","😾",
@@ -35,6 +40,8 @@ const emot = emojis[Math.floor(Math.random() * emojis.length)]
 await client.sendMessage(m.chat, {
 react: { text: emot, key: m.key }
 })
+
+}
 
 }
 initDB(m, client)

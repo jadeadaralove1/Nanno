@@ -39,7 +39,6 @@ export default {
     const mensaje = `𐄹 ۪ ׁ 🪙ᩚ̼ 𖹭̫ ▎ Usuario \`<${name}>\`
 
 > Work » *${formatTime(cooldowns.work)}*
-> Slut » *${formatTime(cooldowns.slut)}*
 > Crime » *${formatTime(cooldowns.crime)}*
 > Mine » *${formatTime(cooldowns.mine)}*
 > Steal » *${formatTime(cooldowns.steal)}*

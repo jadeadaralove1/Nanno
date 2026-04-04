@@ -22,7 +22,7 @@ if (!m.fromMem && body) {
 const palabras = /(bot|nanno|Nanno|Bot|Robot|robot|ia|Ia|Six seven|SIXSEVEN|SIX SEVEN|sixseven|six seven|lol|LOL|Lolkmal|Lol|LOLKMAL|Lolqmal|lol q mal|q|mal|KE|MAL|que|Mal|Ke|Que|Migajero|Migas|Migajera|MIGAJERO|MIGAJERA|migajero|migajera|code|Hola|ola|si|no|NANNO|DEMITRA|Demi|demitra|demi|:3|organos|Loko|loco|Loco|loko|Loka|Loca|loca|loka|botsito|:v)/gi
 
 // probabilidad random para cualquier mensaje
-const reaccionRandom = Math.random() < 0.09
+const reaccionRandom = Math.random() < 0.05
 
 if (body.match(palabras) || reaccionRandom) {
 

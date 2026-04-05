@@ -4,25 +4,33 @@ export default {
 
   run: async (m) => {
 
-    const chats = Object.entries(global.db.data.chats || {})
-      .filter(([jid, data]) => jid && jid.includes("@") && data.isBanned)
+    const db = global.db?.data || {}
 
-    const users = Object.entries(global.db.data.users || {})
-      .filter(([jid, data]) => jid && jid.includes("@") && data.banned)
+    const chats = Object.entries(db.chats || {})
+      .filter(([jid, data]) => typeof jid === "string" && jid.includes("@") && data?.isBanned)
+
+    const users = Object.entries(db.users || {})
+      .filter(([jid, data]) => typeof jid === "string" && jid.includes("@") && data?.banned)
+
+    const userList = users.length
+      ? users.map(([jid]) => `• ${jid}`).join("\n")
+      : "• Ninguno"
+
+    const chatList = chats.length
+      ? chats.map(([jid]) => `• ${jid}`).join("\n")
+      : "• Ninguno"
 
     const caption = `
-╔══✦🌌🎄✦══╗
-  SHADOW GARDEN
-  LISTA DE BANEADOS
-╚══✦🌌🎄✦══╝
+╔══✦🌌✦══╗
+ SHADOW GARDEN
+ LISTA DE BANEADOS
+╚══✦🌌✦══╝
 
-👤 Usuarios baneados: ${users.length}
+👤 Usuarios: ${users.length}
+${userList}
 
-${users.map(([jid]) => `• ${jid}`).join("\n") || "• Ninguno"}
-
-💬 Chats baneados: ${chats.length}
-
-${chats.map(([jid]) => `• ${jid}`).join("\n") || "• Ninguno"}
+💬 Chats: ${chats.length}
+${chatList}
 `.trim()
 
     await m.reply(caption)

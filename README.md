@@ -31,8 +31,6 @@
   <strong>¡Estamos evolucionando constantemente!</strong><br>
  
 </div>
-
-> [!WARNING]  
 > Nuestro Bot sigue mejorando día a día para > ofrecer la mejor experiencia a la comunidad. 
 > Mantente al tanto de todas las novedades y <a href="https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A">únete a nuestro nuevo canal</a>.
 </div>

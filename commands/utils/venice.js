@@ -1,5 +1,4 @@
 import axios from "axios"
-import fetch from "node-fetch"
 
 export default {
   command: ["venice","veniceai"],
@@ -7,19 +6,16 @@ export default {
   help: ["venice"],
   group: true,
 
-  run: async (m, { text }) => {
+  run: async (m, ctx) => {
 
-    const conn = m.conn
+    const conn = ctx.conn || ctx.sock || ctx.client || ctx.bot || global.conn
+    const text = ctx.text
 
-    if (!conn) throw new Error("Conexión del bot no encontrada")
+    if (!conn) throw "No se encontró conexión del bot"
 
     const query = text || (m.quoted && m.quoted.text)
 
     if (!query) {
-      await conn.sendMessage(m.chat,{
-        react:{ text:"❌", key:m.key }
-      })
-
       return conn.sendMessage(m.chat,{
         text:"❌ Ingresa una pregunta.\nEjemplo:\n.venice ¿Qué es la inteligencia artificial?"
       })
@@ -41,9 +37,7 @@ export default {
           webEnabled:true
         },
         {
-          headers:{
-            "content-type":"application/json"
-          }
+          headers:{ "content-type":"application/json" }
         }
       )
 
@@ -54,25 +48,23 @@ export default {
         .join("")
 
       await conn.sendMessage(m.chat,{
-        text:`🧠 *Venice AI*\n\n${result}`
+        text:`🧠 Venice AI\n\n${result}`
       })
 
       await conn.sendMessage(m.chat,{
         react:{ text:"✅", key:m.key }
       })
 
-    } catch(err){
-
-      console.log(err)
+    } catch(e){
 
       await conn.sendMessage(m.chat,{
         react:{ text:"❎", key:m.key }
       })
 
       await conn.sendMessage(m.chat,{
-        text:`❌ Error:\n${err.message}`
+        text:`Error:\n${e.message}`
       })
-    }
 
+    }
   }
 }

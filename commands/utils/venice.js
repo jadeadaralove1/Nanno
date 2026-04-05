@@ -6,26 +6,17 @@ export default {
   help: ["venice"],
   group: true,
 
-  run: async (m, ctx) => {
-
-    const conn = ctx.conn || ctx.sock || ctx.client || ctx.bot || global.conn
-    const text = ctx.text
-
-    if (!conn) throw "No se encontró conexión del bot"
+  run: async (m, { text }) => {
 
     const query = text || (m.quoted && m.quoted.text)
 
     if (!query) {
-      return conn.sendMessage(m.chat,{
-        text:"❌ Ingresa una pregunta.\nEjemplo:\n.venice ¿Qué es la inteligencia artificial?"
-      })
+      return m.reply("❌ Ingresa una pregunta.\nEjemplo:\n.venice ¿Qué es la inteligencia artificial?")
     }
 
     try {
 
-      await conn.sendMessage(m.chat,{
-        react:{ text:"⏳", key:m.key }
-      })
+      m.reply("⏳ Pensando...")
 
       const { data } = await axios.post(
         "https://outerface.venice.ai/api/inference/chat",
@@ -47,23 +38,13 @@ export default {
         .map(v=>JSON.parse(v).content)
         .join("")
 
-      await conn.sendMessage(m.chat,{
-        text:`🧠 Venice AI\n\n${result}`
-      })
-
-      await conn.sendMessage(m.chat,{
-        react:{ text:"✅", key:m.key }
-      })
+      m.reply(`🧠 *Venice AI*\n\n${result}`)
 
     } catch(e){
 
-      await conn.sendMessage(m.chat,{
-        react:{ text:"❎", key:m.key }
-      })
+      console.error(e)
 
-      await conn.sendMessage(m.chat,{
-        text:`Error:\n${e.message}`
-      })
+      m.reply(`❌ Error:\n${e.message}`)
 
     }
   }

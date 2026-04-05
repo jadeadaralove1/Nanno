@@ -7,9 +7,11 @@ export default {
   help: ["venice"],
   group: true,
 
-  run: async (m, { sock, text }) => {
+  run: async (m, { text }) => {
 
-    const conn = sock
+    const conn = m.conn
+
+    if (!conn) throw new Error("Conexión del bot no encontrada")
 
     const query = text || (m.quoted && m.quoted.text)
 
@@ -17,7 +19,10 @@ export default {
       await conn.sendMessage(m.chat,{
         react:{ text:"❌", key:m.key }
       })
-      return
+
+      return conn.sendMessage(m.chat,{
+        text:"❌ Ingresa una pregunta.\nEjemplo:\n.venice ¿Qué es la inteligencia artificial?"
+      })
     }
 
     try {
@@ -31,7 +36,7 @@ export default {
         {
           requestId:"mifinfinity",
           modelId:"dolphin-3.0-mistral-24b",
-          prompt:[{content:query,role:"user"}],
+          prompt:[{ content:query, role:"user"}],
           temperature:0.8,
           webEnabled:true
         },
@@ -49,23 +54,25 @@ export default {
         .join("")
 
       await conn.sendMessage(m.chat,{
-        text:`🧠 Venice AI\n\n${result}`
+        text:`🧠 *Venice AI*\n\n${result}`
       })
 
       await conn.sendMessage(m.chat,{
         react:{ text:"✅", key:m.key }
       })
 
-    } catch(e){
+    } catch(err){
+
+      console.log(err)
 
       await conn.sendMessage(m.chat,{
         react:{ text:"❎", key:m.key }
       })
 
       await conn.sendMessage(m.chat,{
-        text:`Error:\n${e.message}`
+        text:`❌ Error:\n${err.message}`
       })
-
     }
+
   }
 }

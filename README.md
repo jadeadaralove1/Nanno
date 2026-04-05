@@ -29,8 +29,12 @@
 
 <div align="center" style="background-color:#cce5ff; color:#004085; border-radius:8px; padding:15px; margin-bottom:20px;">
   <strong>¡Estamos evolucionando constantemente!</strong><br>
-  Nuestro Bot sigue mejorando día a día para ofrecer la mejor experiencia a la comunidad. 
-  Mantente al tanto de todas las novedades y <a href="https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A">únete a nuestro nuevo canal</a>.
+ 
+</div>
+
+> [!WARNING]  
+> Nuestro Bot sigue mejorando día a día para > ofrecer la mejor experiencia a la comunidad. 
+> Mantente al tanto de todas las novedades y <a href="https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A">únete a nuestro nuevo canal</a>.
 </div>
 
 <p align="center">

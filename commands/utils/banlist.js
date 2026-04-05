@@ -15,17 +15,16 @@ export default {
    𝐋𝐈𝐒𝐓𝐀 𝐃𝐄 𝐁𝐀𝐍𝐄𝐀𝐃𝐎𝐒
 ╚══✦🌌🎄✦══╝
 
-👤 *Almas selladas por las sombras*
-├ Total : ${users.length}
-${users.length ? users.map(([jid]) => `├ @${jid.split('@')[0]}`).join('\n') : '├ Ninguno'}
-└────
+👤 Almas selladas
+Total: ${users.length}
 
-💬 *Dominios prohibidos bajo la nieve*
-├ Total : ${chats.length}
-${chats.length ? chats.map(([jid]) => `├ ${jid}`).join('\n') : '├ Ninguno'}
-└────
+${users.length ? users.map(([jid]) => `• ${jid}`).join('\n') : '• Ninguno'}
 
-✨ El Shadow Garden observa en silencio...
+💬 Grupos prohibidos
+Total: ${chats.length}
+
+${chats.length ? chats.map(([jid]) => `• ${jid}`).join('\n') : '• Ninguno'}
+
 `.trim()
 
     await m.reply(caption)

@@ -5,12 +5,29 @@ export default {
   category: 'rg',
 
   run: async (client, m, args, usedPrefix, command) => {
+
+    // 🔥 FIX 1: asegurar sender válido
+    let sender = m.sender
+    if (typeof sender !== 'string') {
+      sender = m.key?.participant || m.key?.remoteJid || ''
+    }
+
+    if (!sender) {
+      return m.reply('Error: no se pudo identificar al usuario.')
+    }
+
     const text = args.join(' ')
-    const user = global.db.data.users[m.sender]
+
+    // 🔥 FIX 2: asegurar usuario en DB
+    if (!global.db.data.users[sender]) {
+      global.db.data.users[sender] = {}
+    }
+
+    const user = global.db.data.users[sender]
 
     const icon = 'https://files.catbox.moe/i5ctrj.jpg'
 
-    const pp = await client.profilePictureUrl(m.sender, 'image')
+    const pp = await client.profilePictureUrl(sender, 'image')
       .catch(() => 'https://files.catbox.moe/xr2m6u.jpg')
 
     const name2 = m.pushName || 'Usuario'
@@ -51,12 +68,8 @@ export default {
       return m.reply('ूᰍ ֔ ⠾ 💉 No puedes registrarte con más de 60 años.')
     }
 
-    if (age >= 1 && age <= 5) {
-      return m.reply('ूᰍ ֔ ⠾ 💉 No puedes registrarte con menos de 10 años.')
-    }
-
-    if (isNaN(age) || age < 6) {
-      return m.reply('ूᰍ ֔ ⠾ 💉 Edad inválida.')
+    if (age < 10 || isNaN(age)) {
+      return m.reply('ूᰍ ֔ ⠾ 💉 Edad inválida. Debes tener al menos 10 años.')
     }
 
     user.name = `${name.trim()}⋆NANNO⋆`
@@ -64,8 +77,9 @@ export default {
     user.regTime = Date.now()
     user.registered = true
 
+    // 🔥 FIX 3: usar sender seguro
     const sn = createHash('md5')
-      .update(m.sender)
+      .update(sender)
       .digest('hex')
       .slice(0, 20)
 

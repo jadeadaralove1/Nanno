@@ -116,6 +116,7 @@ const strRegex = (str) => str.replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
 let pluginPrefix = client.prefix ? client.prefix : prefix
 
 let inputText = m.text || body || ''
+if (!inputText) return
 
 let matchs = pluginPrefix instanceof RegExp
   ? [[pluginPrefix.exec(inputText), pluginPrefix]]

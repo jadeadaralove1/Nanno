@@ -1,8 +1,5 @@
 import fs from 'fs'
-import path from 'path'
 import moment from 'moment'
-import chalk from 'chalk'
-import gradient from 'gradient-string'
 
 import seeCommands from './lib/system/commandLoader.js'
 import initDB from './lib/system/initDB.js'
@@ -16,28 +13,24 @@ if (!m.message) return
 
 const sender = m.sender
 const from = m.key.remoteJid
-const text =
-  m.message.conversation ||
-  m.message.extendedTextMessage?.text ||
-  m.message.imageMessage?.caption ||
-  m.message.videoMessage?.caption ||
-  m.message.buttonsResponseMessage?.selectedButtonId ||
-  m.message.listResponseMessage?.singleSelectReply?.selectedRowId ||
-  m.message.templateButtonReplyMessage?.selectedId ||
-  ''
 
+const text =
+m.message.conversation ||
+m.message.extendedTextMessage?.text ||
+m.message.imageMessage?.caption ||
+m.message.videoMessage?.caption ||
+m.message.buttonsResponseMessage?.selectedButtonId ||
+m.message.listResponseMessage?.singleSelectReply?.selectedRowId ||
+m.message.templateButtonReplyMessage?.selectedId ||
+''
+
+/* ================= INIT ================= */
 initDB(m, client)
 antilink(client, m)
 
-/* ================= PLUGINS ALL ================= */
-for (const name in global.plugins) {
-const plugin = global.plugins[name]
-if (plugin?.all) {
-try {
-await plugin.all.call(client, m, { client })
-} catch (e) {
-console.log('plugin.all error', name, e)
-}}}
+/* ================= DEBUG (IMPORTANTE) ================= */
+const DEBUG = true
+const log = (...a) => DEBUG && console.log('[BOT]', ...a)
 
 /* ================= SETTINGS ================= */
 const botJid = client.user.id.split(':')[0] + '@s.whatsapp.net'
@@ -47,7 +40,7 @@ const user = global.db.data.users[sender] ||= {}
 
 const namebot = settings.namebot || 'Yuki'
 
-/* ================= PREFIX (FIXED SIMPLE) ================= */
+/* ================= PREFIX SIMPLE & ROBUSTO ================= */
 const prefixes = [
 namebot,
 namebot.charAt(0),
@@ -63,68 +56,93 @@ const prefixRegex = new RegExp(
 )
 
 const match = text.match(prefixRegex)
-if (!match) return
+
+if (!match) {
+log('❌ Sin prefix:', text)
+return
+}
 
 const usedPrefix = match[0]
-const args = text.slice(usedPrefix.length).trim().split(/\s+/)
+const raw = text.slice(usedPrefix.length).trim()
+const args = raw.split(/\s+/)
+
 const command = (args.shift() || '').toLowerCase()
 const body = args.join(' ')
 
-/* ================= GROUP INFO ================= */
-let groupAdmins = []
+log('✔ comando detectado:', command)
+
+/* ================= COMMAND EMPTY ================= */
+if (!command) {
+log('❌ comando vacío')
+return
+}
+
+/* ================= PRIMARY BOT BLOCK FIXED ================= */
+if (chat.primaryBot && chat.primaryBot !== botJid) {
+log('⚠ primaryBot bloquea ejecución:', chat.primaryBot)
+return
+}
+
+/* ================= GROUP INFO SAFE ================= */
 let isAdmins = false
 let isBotAdmins = false
 
 if (m.isGroup) {
-const metadata = await client.groupMetadata(from).catch(() => null)
+try {
+const metadata = await client.groupMetadata(from)
 const participants = metadata?.participants || []
 
-groupAdmins = participants.filter(p => p.admin)
+const admins = participants.filter(p => p.admin)
 
-isAdmins = groupAdmins.some(p => p.id === sender)
-isBotAdmins = groupAdmins.some(p => p.id === botJid)
-}
+isAdmins = admins.some(p => p.id === sender)
+isBotAdmins = admins.some(p => p.id === botJid)
 
-/* ================= ANTI BLOCK PRIVADO (FIX) ================= */
-if (!m.isGroup) {
-const allowed = [
-'report','reporte','sug','suggest','invite','invitar'
-]
-
-if (command && !allowed.includes(command) && !global.owner.includes(sender.split('@')[0])) {
-return // ahora NO rompe, solo ignora limpio
+} catch (e) {
+log('⚠ error groupMetadata:', e.message)
 }
 }
 
-/* ================= CHAT PRIMARY FIX ================= */
-const chatData = global.db.data.chats[from] ||= {}
-if (chatData.primaryBot && chatData.primaryBot !== botJid) {
-if (chatData.primaryBot !== botJid) {
-return // FIX: antes te bloqueaba sin control
-}}
-
-/* ================= COMMAND SYSTEM ================= */
-if (!command) return
-
+/* ================= COMMAND LOADER ================= */
 const cmdData = global.comandos.get(command)
-if (!cmdData) return
 
-if (cmdData.isAdmin && !isAdmins) return
-if (cmdData.botAdmin && !isBotAdmins) return
-if (cmdData.isOwner && !global.owner.includes(sender.split('@')[0])) return
+if (!cmdData) {
+log('❌ comando no registrado:', command)
+return m.reply?.(`⚠ El comando *${command}* no existe.`)
+}
 
+/* ================= PERMISSIONS ================= */
+if (cmdData.isOwner && !global.owner.includes(sender.split('@')[0])) {
+log('⛔ owner requerido')
+return
+}
+
+if (cmdData.isAdmin && !isAdmins) {
+log('⛔ admin requerido')
+return m.reply?.('⚠ Solo administradores')
+}
+
+if (cmdData.botAdmin && !isBotAdmins) {
+log('⛔ bot admin requerido')
+return m.reply?.('⚠ Necesito ser admin')
+}
+
+/* ================= EXECUTION ================= */
 try {
 await client.readMessages([m.key])
 
 user.usedcommands = (user.usedcommands || 0) + 1
+
+log('🚀 ejecutando:', command)
 
 await cmdData.run(client, m, args, usedPrefix, command, body)
 
 level(m)
 
 } catch (e) {
+console.log('❌ ERROR CMD:', command, e)
+
 await client.sendMessage(from, {
-text: '❌ Error:\n' + e.message
+text: '❌ Error ejecutando comando:\n' + e.message
 }, { quoted: m })
 }
 }

@@ -160,5 +160,3 @@ ${palabraOculta}
 }
 }
 }
-
-Me da error de sintaxis

@@ -156,7 +156,7 @@ console.error(`Error en plugin.before -> ${name}`, err)
 }
 }
 
-if (!match) return
+if (!match || !match[0]) return
 
 let usedPrefix = (match[0] || [])[0] || ''
 let args = m.text.slice(usedPrefix.length).trim().split(" ")

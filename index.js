@@ -238,11 +238,7 @@ async function startBot() {
       console.log(err)
     }
   })
-  try {
-  await events(client, m)
-  } catch (err) {
-   console.log(chalk.gray(`[ BOT  ]  → ${err}`))
-  }
+
   client.decodeJid = (jid) => {
     if (!jid) return jid
     if (/:\d+@/gi.test(jid)) {

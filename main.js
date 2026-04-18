@@ -27,6 +27,9 @@ m.message.listResponseMessage?.singleSelectReply?.selectedRowId ||
 m.message.templateButtonReplyMessage?.selectedId ||
 ''
 
+const textMsg = m.text || body
+if (!textMsg) return
+
 const chat = global.db.data.chats[m.chat] ||= {}
 
 if (chat.reacciones === undefined) chat.reacciones = true
@@ -34,7 +37,6 @@ if (chat.reacciones === undefined) chat.reacciones = true
 if (!m.fromMem && body && chat.reacciones) {
 
 const palabras = /(bot|nanno|Bot|Robot|ia|Six seven|sixseven|botsito|:v)/gi
-
 const reaccionRandom = Math.random() < 0.01
 
 if (body.match(palabras) || reaccionRandom) {
@@ -52,7 +54,6 @@ await client.sendMessage(m.chat, {
 react: { text: emot, key: m.key }
 })
 }
-
 }
 
 initDB(m, client)
@@ -115,35 +116,28 @@ const strRegex = (str) => str.replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
 
 let pluginPrefix = client.prefix ? client.prefix : prefix
 
-let inputText = m.text || body || ''
-if (!inputText) return
+let inputText = textMsg
 
 let matchs = []
 
 if (pluginPrefix instanceof RegExp) {
-  matchs = [[pluginPrefix.exec(inputText), pluginPrefix]]
+matchs = [[pluginPrefix.exec(inputText), pluginPrefix]]
 } else if (Array.isArray(pluginPrefix)) {
-  matchs = pluginPrefix.map(p => {
-    let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
-    return [regex.exec(inputText), regex]
-  })
-} else {
-  let regex = new RegExp(strRegex(pluginPrefix))
-  matchs = [[regex.exec(inputText), regex]]
-}
+matchs = pluginPrefix.map(p => {
 let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
-return [regex.exec(m.text), regex]
+return [regex.exec(inputText), regex]
 })
-: [[new RegExp(strRegex(pluginPrefix)).exec(m.text), new RegExp(strRegex(pluginPrefix))]]
-
-const text = m.text || body || ''
+} else {
+let regex = new RegExp(strRegex(pluginPrefix))
+matchs = [[regex.exec(inputText), regex]]
+}
 
 let match = matchs.find(p => {
-  try {
-    return p[1]?.test?.(text)
-  } catch {
-    return false
-  }
+try {
+return p[1]?.test?.(inputText)
+} catch {
+return false
+}
 })
 
 for (const name in global.plugins) {
@@ -163,7 +157,7 @@ console.error(`Error en plugin.before -> ${name}`, err)
 if (!match || !match[0]) return
 
 let usedPrefix = (match[0] || [])[0] || ''
-let args = m.text.slice(usedPrefix.length).trim().split(" ")
+let args = inputText.slice(usedPrefix.length).trim().split(" ")
 let command = (args.shift() || '').toLowerCase()
 let text = args.join(' ')
 

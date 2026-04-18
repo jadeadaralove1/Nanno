@@ -118,9 +118,6 @@ let pluginPrefix = client.prefix ? client.prefix : prefix
 let inputText = m.text || body || ''
 if (!inputText) return
 
-let inputText = m.text || body || ''
-if (!inputText) return
-
 let matchs = []
 
 if (pluginPrefix instanceof RegExp) {

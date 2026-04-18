@@ -115,8 +115,16 @@ const strRegex = (str) => str.replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
 
 let pluginPrefix = client.prefix ? client.prefix : prefix
 
+let inputText = m.text || body || ''
+
 let matchs = pluginPrefix instanceof RegExp
-? [[pluginPrefix.exec(m.text), pluginPrefix]]
+  ? [[pluginPrefix.exec(inputText), pluginPrefix]]
+  : Array.isArray(pluginPrefix)
+  ? pluginPrefix.map(p => {
+      let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
+      return [regex.exec(inputText), regex]
+    })
+  : [[new RegExp(strRegex(pluginPrefix)).exec(inputText), new RegExp(strRegex(pluginPrefix))]]
 : Array.isArray(pluginPrefix)
 ? pluginPrefix.map(p => {
 let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))

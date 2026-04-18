@@ -17,34 +17,6 @@ if (!m.message) return
 const sender = m.sender 
 let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
 
-if (!m.fromMem && body) {
-
-const palabras = /(bot|nanno|Nanno|Bot|Robot|robot|ia|Ia|Six seven|SIXSEVEN|SIX SEVEN|sixseven|six seven|botsito|:v)/gi
-
-// probabilidad random para cualquier mensaje
-const reaccionRandom = Math.random() < 0.01 // 1%
-if (body.match(palabras) || reaccionRandom) {
-
-const emojis = [
-"😺","😸","😹","😻","😼","😽","🙀","😿","😾",
-"🥿","😏","😳","🐢","🤯","😱","😨",
-"🤫","🫡","🤧","♠","🦭","🤖","🤝","💪","👑",
-"🐋","🐱","🐈","☠️","💗",
-"⚡️","🧚‍♀️","🫂","🪻","⌛",
-"🍓","🍎","🎈","🪄",
-"💤","🌟","💋","👀","🪷","🐝","🐳","🔥",
-"💘","☔","🍫","🥊","🎀"
-]
-
-const emot = emojis[Math.floor(Math.random() * emojis.length)]
-
-await client.sendMessage(m.chat, {
-react: { text: emot, key: m.key }
-})
-
-}
-
-}
 initDB(m, client)
 antilink(client, m)
 
@@ -63,7 +35,7 @@ const chat = global.db.data.chats[m.chat] || {}
 const settings = global.db.data.settings[botJid] || {}  
 const user = global.db.data.users[sender] ||= {}
 const users = chat.users[sender] || {}
-const rawBotname = settings.namebot || 'Nanno'
+const rawBotname = settings.namebot || 'Yuki'
 const tipo = settings.type || 'Sub'
 const isValidBotname = /^[\w\s]+$/.test(rawBotname)
 const namebot = isValidBotname ? rawBotname : 'Mahiru'
@@ -167,7 +139,7 @@ const allowedInPrivateForUsers = ['report', 'reporte', 'sug', 'suggest', 'invite
 if (!isOwners && !allowedInPrivateForUsers.includes(command)) return
 }
 if (chat?.isBanned && !(command === 'bot' && text === 'on') && !global.owner.map(num => num + '@s.whatsapp.net').includes(sender)) {
-await m.reply(`𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ El bot *${settings.botname}* está desactivado en este grupo.\n\n> ♡ Un *administrador* puede activarlo con el comando:\n> » *${usedPrefix}bot on*`)
+await m.reply(`ꕥ El bot *${settings.botname}* está desactivado en este grupo.\n\n> ✎ Un *administrador* puede activarlo con el comando:\n> » *${usedPrefix}bot on*`)
 return
 }
 
@@ -183,36 +155,15 @@ const cmdData = global.comandos.get(command)
 if (!cmdData) {
 if (settings.prefix === true) return
 await client.readMessages([m.key])
-return m.reply(`𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ El comando *${command}* no existe.\n♡ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
+return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
 }
 const comando = m.text.slice(usedPrefix.length);
 if (cmdData.isOwner && !global.owner.map(num => num + '@s.whatsapp.net').includes(sender)) {
 if (settings.prefix === true) return
-return m.reply(`𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ El comando *${command}* no existe.\n♡ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
+return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
 }
 if (cmdData.isAdmin && !isAdmins) return client.reply(m.chat, mess.admin, m)
 if (cmdData.botAdmin && !isBotAdmins) return client.reply(m.chat, mess.botAdmin, m)
-
-const permitidos = [
-'reg',
-'register',
-'registrar',
-'verify',
-'verificar'
-]
-
-if (!user.registered && !permitidos.includes(command)) {
-return m.reply(`╭֔ ⠾ 💉REGISTRO OBLIGATORIO╮
-> Debes registrarte antes de usar comandos.
-│
-│ 𝗨𝘀𝗮:
-│ ${usedPrefix}reg nombre.edad
-│
-│ 𝗘𝗷𝗲𝗺𝗽𝗹𝗼:
-│ ${usedPrefix}reg nanno.age
-╰────────────`)
-}
-
 try {
 await client.readMessages([m.key])
 user.usedcommands = (user.usedcommands || 0) + 1
@@ -224,7 +175,7 @@ user.name = m.pushName
 users.stats[today].cmds++
 await cmdData.run(client, m, args, usedPrefix, command, text)
 } catch (error) {
-await client.sendMessage(m.chat, { text: `𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ Error al ejecutar el comando\n${error}` }, { quoted: m })
+await client.sendMessage(m.chat, { text: `《✧》 Error al ejecutar el comando\n${error}` }, { quoted: m })
 }
 level(m)
 }

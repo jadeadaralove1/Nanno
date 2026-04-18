@@ -14,14 +14,22 @@ if (!m.message) return
 const sender = m.sender
 const from = m.key.remoteJid
 
+const msg = m.message
+
 const text =
-m.message.conversation ||
-m.message.extendedTextMessage?.text ||
-m.message.imageMessage?.caption ||
-m.message.videoMessage?.caption ||
-m.message.buttonsResponseMessage?.selectedButtonId ||
-m.message.listResponseMessage?.singleSelectReply?.selectedRowId ||
-m.message.templateButtonReplyMessage?.selectedId ||
+msg?.conversation ||
+msg?.extendedTextMessage?.text ||
+msg?.imageMessage?.caption ||
+msg?.videoMessage?.caption ||
+msg?.documentMessage?.caption ||
+msg?.buttonsResponseMessage?.selectedButtonId ||
+msg?.listResponseMessage?.singleSelectReply?.selectedRowId ||
+msg?.templateButtonReplyMessage?.selectedId ||
+msg?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation ||
+msg?.extendedTextMessage?.contextInfo?.quotedMessage?.extendedTextMessage?.text ||
+msg?.ephemeralMessage?.message?.extendedTextMessage?.text ||
+msg?.viewOnceMessage?.message?.conversation ||
+msg?.viewOnceMessage?.message?.extendedTextMessage?.text ||
 ''
 
 /* ================= INIT ================= */

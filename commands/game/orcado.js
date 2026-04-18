@@ -1,4 +1,4 @@
-let partidas = {}
+let partidas = global.partidas ||= {}
 
 const ahorcadoStages = [
 `+------+
@@ -44,7 +44,7 @@ const ahorcadoStages = [
 `+------+
 |      |
 |      O
-|     /|\
+|     /|\\
 |      
 ===========
 `,
@@ -52,7 +52,7 @@ const ahorcadoStages = [
 `+------+
 |      |
 |      O
-|     /|\
+|     /|\\
 |     /
 |      
 ===========
@@ -61,73 +61,74 @@ const ahorcadoStages = [
 `+------+
 |      |
 |      O
-|     /|\
-|     / \
+|     /|\\
+|     / \\
 |      
 ===========
 `
 ]
 
 function ocultarPalabra(palabra, letras) {
-return palabra
-.split('')
-.map(l => (letras.includes(l) ? l : '_'))
-.join(' ')
+  return palabra
+    .split('')
+    .map(l => (letras.includes(l) ? l : '_'))
+    .join(' ')
 }
 
 export default {
-command: ['orcado', 'ahorcado', 'letra'],
-tags: ['game'],
-help: ['orcado', 'letra <letra>'],
-group: true,
+  command: ['orcado', 'ahorcado', 'letra'],
+  tags: ['game'],
+  help: ['orcado', 'letra <letra>'],
+  group: true,
 
-run: async (conn, m, args) => {
-const command = (m.text || '').split(' ')[0].slice(1).toLowerCase()
-const text = args.join(' ')
-const chatId = m.chat
-const jugador = m.pushName || m.sender
+  run: async (client, m, args) => {
 
-const palabras = [  
-  { palabra: "galaxia", pista: "Conjunto enorme de estrellas 🌌" },  
-  { palabra: "estrella", pista: "Brilla en el cielo ✨" },  
-  { palabra: "cometa", pista: "Tiene cola ☄️" },  
-  { palabra: "planeta", pista: "Gira alrededor del sol 🪐" },  
-  { palabra: "aurora", pista: "Luces del cielo polar 🌈" },  
-  { palabra: "dragon", pista: "Escupe fuego 🐉" },  
-  { palabra: "magia", pista: "Poder sobrenatural 🪄" },  
-  { palabra: "fantasia", pista: "Mundo imaginario 🧙" },  
-  { palabra: "invierno", pista: "Hace frío ❄️" },  
-  { palabra: "navidad", pista: "Fiesta 🎄" },  
-  { palabra: "regalo", pista: "Se da 🎁" },  
-  { palabra: "nieve", pista: "Blanca ❄️" },  
-  { palabra: "trineo", pista: "Santa 🎅" },  
-  { palabra: "diamante", pista: "Piedra 💎" },  
-  { palabra: "tesoro", pista: "Oro escondido 🏴‍☠️" },  
-  { palabra: "reino", pista: "Gobernado por rey 👑" },  
-  { palabra: "leyenda", pista: "Historia 📖" },  
-  { palabra: "espiritu", pista: "Fantasma 👻" },  
-  { palabra: "luz", pista: "Ilumina 💡" },  
-  { palabra: "eterno", pista: "Sin fin ♾️" },  
-  { palabra: "cristal", pista: "Transparente 🔮" },  
-  { palabra: "guardian", pista: "Protege ⚔️" },  
-  { palabra: "infinito", pista: "Sin límite ♾️" },  
-  { palabra: "demitra", pista: "Tu bot 😏" },  
-  { palabra: "omega", pista: "Última letra 🔚" }  
-]  
+    const text = args.join(' ')
+    const chatId = m.chat
+    const jugador = m.pushName || m.sender
 
-// 🎮 INICIAR  
-if (command === 'orcado' || command === 'ahorcado') {  
-  const seleccion = palabras[Math.floor(Math.random() * palabras.length)]  
+    const palabras = [
+      { palabra: "galaxia", pista: "Conjunto enorme de estrellas 🌌" },
+      { palabra: "estrella", pista: "Brilla en el cielo ✨" },
+      { palabra: "cometa", pista: "Tiene cola ☄️" },
+      { palabra: "planeta", pista: "Gira alrededor del sol 🪐" },
+      { palabra: "aurora", pista: "Luces del cielo polar 🌈" },
+      { palabra: "dragon", pista: "Escupe fuego 🐉" },
+      { palabra: "magia", pista: "Poder sobrenatural 🪄" },
+      { palabra: "fantasia", pista: "Mundo imaginario 🧙" },
+      { palabra: "invierno", pista: "Hace frío ❄️" },
+      { palabra: "navidad", pista: "Fiesta 🎄" },
+      { palabra: "regalo", pista: "Se da 🎁" },
+      { palabra: "nieve", pista: "Blanca ❄️" },
+      { palabra: "trineo", pista: "Santa 🎅" },
+      { palabra: "diamante", pista: "Piedra 💎" },
+      { palabra: "tesoro", pista: "Oro escondido 🏴‍☠️" },
+      { palabra: "reino", pista: "Gobernado por rey 👑" },
+      { palabra: "leyenda", pista: "Historia 📖" },
+      { palabra: "espiritu", pista: "Fantasma 👻" },
+      { palabra: "luz", pista: "Ilumina 💡" },
+      { palabra: "eterno", pista: "Sin fin ♾️" },
+      { palabra: "cristal", pista: "Transparente 🔮" },
+      { palabra: "guardian", pista: "Protege ⚔️" },
+      { palabra: "infinito", pista: "Sin límite ♾️" },
+      { palabra: "demitra", pista: "Tu bot 😏" },
+      { palabra: "omega", pista: "Última letra 🔚" }
+    ]
 
-  partidas[chatId] = {  
-    jugador,  
-    palabra: seleccion.palabra,  
-    pista: seleccion.pista,  
-    letras: [],  
-    errores: 0  
-  }  
+    // 🎮 INICIAR
+    if (m.text?.startsWith('.orcado') || m.text?.startsWith('.ahorcado')) {
 
-  const mensaje = `⣴⣿⣦⣀⣴⣿✿⣦
+      const seleccion = palabras[Math.floor(Math.random() * palabras.length)]
+
+      partidas[chatId] = {
+        jugador,
+        palabra: seleccion.palabra,
+        pista: seleccion.pista,
+        letras: [],
+        errores: 0
+      }
+
+      const mensaje = `⣴⣿⣦⣀⣴⣿✿⣦
 
 　𝜗ϱ　　　˚　　　🪢 AHORCADO ⁺　　　
 
@@ -140,81 +141,81 @@ ${ocultarPalabra(seleccion.palabra, [])}
 
 > ${seleccion.pista}
 
-
-
 ⢷     ◟ 　 Usa ".letra a"`
 
-return conn.sendMessage(m.chat, { text: mensaje }, { quoted: m })  
-}  
+      return client.sendMessage(m.chat, { text: mensaje }, { quoted: m })
+    }
 
-// 🔤 ADIVINAR  
-if (command === 'letra') {  
-  if (!partidas[chatId]) {  
-    return conn.sendMessage(m.chat, { text: "⚠️ Usa *.orcado* primero" }, { quoted: m })  
-  }  
+    // 🔤 LETRA
+    if (m.text?.startsWith('.letra')) {
 
-  if (!text) {  
-    return conn.sendMessage(m.chat, { text: "✍️ Escribe una letra" }, { quoted: m })  
-  }  
+      if (!partidas[chatId]) {
+        return client.sendMessage(m.chat, { text: "⚠️ Usa *.orcado* primero" }, { quoted: m })
+      }
 
-  const partida = partidas[chatId]  
-  const letra = text.toLowerCase().trim()  
+      if (!text) {
+        return client.sendMessage(m.chat, { text: "✍️ Escribe una letra" }, { quoted: m })
+      }
 
-  if (partida.letras.includes(letra)) {  
-    return conn.sendMessage(m.chat, { text: `⚠️ Ya usaste "${letra}"` }, { quoted: m })  
-  }  
+      const partida = partidas[chatId]
+      const letra = text.toLowerCase().trim()
 
-  partida.letras.push(letra)  
+      if (partida.letras.includes(letra)) {
+        return client.sendMessage(m.chat, { text: `⚠️ Ya usaste "${letra}"` }, { quoted: m })
+      }
 
-  const palabraOculta = ocultarPalabra(partida.palabra, partida.letras)  
+      partida.letras.push(letra)
 
-  // ✅ ACIERTO  
-  if (partida.palabra.includes(letra)) {  
-    if (!palabraOculta.includes('_')) {  
-      delete partidas[chatId]  
+      const palabraOculta = ocultarPalabra(partida.palabra, partida.letras)
 
-      return conn.sendMessage(m.chat, {  
-        text: `🎉 GANASTE 🎉
+      // ✅ correcto
+      if (partida.palabra.includes(letra)) {
+
+        if (!palabraOculta.includes('_')) {
+          delete partidas[chatId]
+
+          return client.sendMessage(m.chat, {
+            text: `🎉 GANASTE 🎉
 
 👤 ${jugador}
 🔤 ${partida.palabra}`
-}, { quoted: m })
-}
+          }, { quoted: m })
+        }
 
-return conn.sendMessage(m.chat, {  
-      text: `${ahorcadoStages[partida.errores]}
+        return client.sendMessage(m.chat, {
+          text: `${ahorcadoStages[partida.errores]}
 
 ✅ Correcto
 
 ${palabraOculta}`
-}, { quoted: m })
-}
+        }, { quoted: m })
+      }
 
-// ❌ ERROR  
-  partida.errores++  
+      // ❌ error
+      partida.errores++
 
-  if (partida.errores >= ahorcadoStages.length - 1) {  
-    const palabra = partida.palabra  
-    delete partidas[chatId]  
+      if (partida.errores >= ahorcadoStages.length - 1) {
+        const palabra = partida.palabra
+        delete partidas[chatId]
 
-    return conn.sendMessage(m.chat, {  
-      text: `${ahorcadoStages[ahorcadoStages.length - 1]}
+        return client.sendMessage(m.chat, {
+          text: `${ahorcadoStages.at(-1)}
 
 💀 PERDISTE
 👤 ${jugador}
 🔤 ${palabra}`
-}, { quoted: m })
-}
+        }, { quoted: m })
+      }
 
-return conn.sendMessage(m.chat, {  
-    text: `${ahorcadoStages[partida.errores]}
+      return client.sendMessage(m.chat, {
+        text: `${ahorcadoStages[partida.errores]}
 
 ❌ Incorrecto: ${letra}
 
 ${palabraOculta}
 
 ❤️ Intentos: ${ahorcadoStages.length - 1 - partida.errores}`
-}, { quoted: m })
-}
-}
+      }, { quoted: m })
+    }
+  }
 }

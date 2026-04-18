@@ -118,16 +118,22 @@ let pluginPrefix = client.prefix ? client.prefix : prefix
 let inputText = m.text || body || ''
 if (!inputText) return
 
-let matchs = pluginPrefix instanceof RegExp
-  ? [[pluginPrefix.exec(inputText), pluginPrefix]]
-  : Array.isArray(pluginPrefix)
-  ? pluginPrefix.map(p => {
-      let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
-      return [regex.exec(inputText), regex]
-    })
-  : [[new RegExp(strRegex(pluginPrefix)).exec(inputText), new RegExp(strRegex(pluginPrefix))]]
-: Array.isArray(pluginPrefix)
-? pluginPrefix.map(p => {
+let inputText = m.text || body || ''
+if (!inputText) return
+
+let matchs = []
+
+if (pluginPrefix instanceof RegExp) {
+  matchs = [[pluginPrefix.exec(inputText), pluginPrefix]]
+} else if (Array.isArray(pluginPrefix)) {
+  matchs = pluginPrefix.map(p => {
+    let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
+    return [regex.exec(inputText), regex]
+  })
+} else {
+  let regex = new RegExp(strRegex(pluginPrefix))
+  matchs = [[regex.exec(inputText), regex]]
+}
 let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
 return [regex.exec(m.text), regex]
 })

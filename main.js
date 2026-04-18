@@ -58,7 +58,7 @@ if (plugin && typeof plugin.all === "function") {
 try {
 await plugin.all.call(client, m, { client })
 } catch (err) {
-console.error(Error en plugin.all -> ${name}, err)
+console.error(`Error en plugin.all -> ${name}`, err)
 }}}
 
 const from = m.key.remoteJid

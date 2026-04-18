@@ -80,7 +80,7 @@ const rawBotname = settings.namebot || 'Nanno'
 const tipo = settings.type || 'Sub'
 
 const isValidBotname = /^[\w\s]+$/.test(rawBotname)
-const namebot = isValidBotname ? rawBotname : 'Mahiru'
+const namebot = isValidBotname ? rawBotname : 'Nanno'
 
 const shortForms = [
 namebot.charAt(0),

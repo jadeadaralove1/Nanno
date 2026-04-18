@@ -14,9 +14,41 @@ seeCommands()
 
 export default async (client, m) => {
 if (!m.message) return
-const sender = m.sender 
+const sender = m.sender
 let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
 
+const chat = global.db.data.chats[m.chat] ||= {}
+
+if (chat.reacciones === undefined) chat.reacciones = true
+
+if (!m.fromMem && body && chat.reacciones) {
+
+const palabras = /(bot|nanno|Nanno|Bot|Robot|robot|ia|Ia|Six seven|SIXSEVEN|SIX SEVEN|sixseven|six seven|botsito|:v)/gi
+
+// probabilidad random para cualquier mensaje
+const reaccionRandom = Math.random() < 0.01 // 1%
+if (body.match(palabras) || reaccionRandom) {
+
+const emojis = [
+"😺","😸","😹","😻","😼","😽","🙀","😿","😾",
+"🥿","😏","😳","🐢","🤯","😱","😨",
+"🤫","🫡","🤧","♠","🦭","🤖","🤝","💪","👑",
+"🐋","🐱","🐈","☠️","💗",
+"⚡️","🧚‍♀️","🫂","🪻","⌛",
+"🍓","🍎","🎈","🪄",
+"💤","🌟","💋","👀","🪷","🐝","🐳","🔥",
+"💘","☔","🍫","🥊","🎀"
+]
+
+const emot = emojis[Math.floor(Math.random() * emojis.length)]
+
+await client.sendMessage(m.chat, {
+react: { text: emot, key: m.key }
+})
+
+}
+
+}
 initDB(m, client)
 antilink(client, m)
 
@@ -26,32 +58,31 @@ if (plugin && typeof plugin.all === "function") {
 try {
 await plugin.all.call(client, m, { client })
 } catch (err) {
-console.error(`Error en plugin.all -> ${name}`, err)
+console.error(Error en plugin.all -> ${name}, err)
 }}}
 
 const from = m.key.remoteJid
 const botJid = client.user.id.split(':')[0] + '@s.whatsapp.net' || client.user.lid
-const chat = global.db.data.chats[m.chat] || {}
-const settings = global.db.data.settings[botJid] || {}  
+const settings = global.db.data.settings[botJid] || {}
 const user = global.db.data.users[sender] ||= {}
 const users = chat.users[sender] || {}
-const rawBotname = settings.namebot || 'Yuki'
+const rawBotname = settings.namebot || 'Nanno'
 const tipo = settings.type || 'Sub'
 const isValidBotname = /^[\w\s]+$/.test(rawBotname)
 const namebot = isValidBotname ? rawBotname : 'Mahiru'
 const shortForms = [namebot.charAt(0), namebot.split(" ")[0], tipo.split(" ")[0], namebot.split(" ")[0].slice(0, 2), namebot.split(" ")[0].slice(0, 3)]
-const prefixes = shortForms.map(name => `${name}`)
+const prefixes = shortForms.map(name => ${name})
 prefixes.unshift(namebot)
 let prefix
 if (Array.isArray(settings.prefix) || typeof settings.prefix === 'string') {
 const prefixArray = Array.isArray(settings.prefix) ? settings.prefix : [settings.prefix]
-prefix = new RegExp('^(' + prefixes.join('|') + ')?(' + prefixArray.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')', 'i')
+prefix = new RegExp('^(' + prefixes.join('|') + ')?(' + prefixArray.map(p => p.replace(/[|\{}()[]^$+.-^]/g, '\$&')).join('|') + ')', 'i')
 } else if (settings.prefix === true) {
 prefix = new RegExp('^', 'i')
 } else {
 prefix = new RegExp('^(' + prefixes.join('|') + ')?', 'i')
 }
-const strRegex = (str) => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+const strRegex = (str) => str.replace(/[|\{}()[]^$+?.]/g, '\$&')
 let pluginPrefix = client.prefix ? client.prefix : prefix
 let matchs = pluginPrefix instanceof RegExp ? [[pluginPrefix.exec(m.text), pluginPrefix]] : Array.isArray(pluginPrefix) ? pluginPrefix.map(p => {
 let regex = p instanceof RegExp ? p : new RegExp(strRegex(p))
@@ -67,7 +98,7 @@ try {
 if (await plugin.before.call(client, m, { client })) {
 continue
 }} catch (err) {
-console.error(`Error en plugin.all -> ${name}`, err)
+console.error(Error en plugin.all -> ${name}, err)
 }}}
 
 if (!match) return
@@ -94,7 +125,7 @@ if (!consolePrimary || consolePrimary === client.user.id.split(':')[0] + '@s.wha
 const h = chalk.bold.blue('╭────────────────────────────···')
 const t = chalk.bold.blue('╰────────────────────────────···')
 const v = chalk.bold.blue('│')
-console.log(`\n${h}\n${chalk.bold.yellow(`${v} Fecha: ${chalk.whiteBright(moment().format('DD/MM/YY HH:mm:ss'))}`)}\n${chalk.bold.blueBright(`${v} Usuario: ${chalk.whiteBright(pushname)}`)}\n${chalk.bold.magentaBright(`${v} Remitente: ${gradient('deepskyblue', 'darkorchid')(sender)}`)}\n${m.isGroup ? chalk.bold.cyanBright(`${v} Grupo: ${chalk.greenBright(groupName)}\n${v} ID: ${gradient('violet', 'midnightblue')(from)}\n`) : chalk.bold.greenBright(`${v} Chat privado\n`)}${t}`)}
+console.log(\n${h}\n${chalk.bold.yellow(${v} Fecha: ${chalk.whiteBright(moment().format('DD/MM/YY HH:mm:ss'))})}\n${chalk.bold.blueBright(${v} Usuario: ${chalk.whiteBright(pushname)})}\n${chalk.bold.magentaBright(${v} Remitente: ${gradient('deepskyblue', 'darkorchid')(sender)})}\n${m.isGroup ? chalk.bold.cyanBright(${v} Grupo: ${chalk.greenBright(groupName)}\n${v} ID: ${gradient('violet', 'midnightblue')(from)}\n) : chalk.bold.greenBright(${v} Chat privado\n)}${t})}
 
 const hasPrefix = settings.prefix === true ? true : (Array.isArray(settings.prefix) ? settings.prefix : typeof settings.prefix === 'string' ? [settings.prefix] : []).some(p => m.text?.startsWith(p))
 function getAllSessionBots() {
@@ -116,7 +147,7 @@ const ownerId = global.client.user.id.split(':')[0] + '@s.whatsapp.net'
 bots.push(ownerId)
 }} catch {}
 return bots
-}  
+}
 const botprimaryId = chat?.primaryBot
 if (botprimaryId && botprimaryId !== botJid) {
 if (hasPrefix) {
@@ -131,7 +162,7 @@ if ((primaryInSessions && primaryInGroup) || isPrimarySelf) {
 return
 }}}
 
-if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) || (m.id.startsWith("B24E") && m.id.length === 20))) return  
+if ((m.id.startsWith("3EB0") || (m.id.startsWith("BAE5") && m.id.length === 16) || (m.id.startsWith("B24E") && m.id.length === 20))) return
 const isOwners = [botJid, ...(settings.owner ? [settings.owner] : []), ...global.owner.map(num => num + '@s.whatsapp.net')].includes(sender)
 if (!isOwners && settings.self) return
 if (m.chat && !m.chat.endsWith('g.us')) {
@@ -139,7 +170,7 @@ const allowedInPrivateForUsers = ['report', 'reporte', 'sug', 'suggest', 'invite
 if (!isOwners && !allowedInPrivateForUsers.includes(command)) return
 }
 if (chat?.isBanned && !(command === 'bot' && text === 'on') && !global.owner.map(num => num + '@s.whatsapp.net').includes(sender)) {
-await m.reply(`ꕥ El bot *${settings.botname}* está desactivado en este grupo.\n\n> ✎ Un *administrador* puede activarlo con el comando:\n> » *${usedPrefix}bot on*`)
+await m.reply(𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ El bot *${settings.botname}* está desactivado en este grupo.\n\n> ♡ Un *administrador* puede activarlo con el comando:\n> » *${usedPrefix}bot on*)
 return
 }
 
@@ -155,15 +186,39 @@ const cmdData = global.comandos.get(command)
 if (!cmdData) {
 if (settings.prefix === true) return
 await client.readMessages([m.key])
-return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
+return m.reply(𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ El comando *${command}* no existe.\n♡ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.)
 }
 const comando = m.text.slice(usedPrefix.length);
 if (cmdData.isOwner && !global.owner.map(num => num + '@s.whatsapp.net').includes(sender)) {
 if (settings.prefix === true) return
-return m.reply(`ꕤ El comando *${command}* no existe.\n✎ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.`)
+return m.reply(𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ El comando *${command}* no existe.\n♡ Usa *${usedPrefix}help* para ver la lista de comandos disponibles.)
 }
 if (cmdData.isAdmin && !isAdmins) return client.reply(m.chat, mess.admin, m)
 if (cmdData.botAdmin && !isBotAdmins) return client.reply(m.chat, mess.botAdmin, m)
+
+const permitidos = [
+'reg',
+'register',
+'registrar',
+'verify',
+'verificar'
+]
+
+if (!user.registered && !permitidos.includes(command)) {
+return m.reply(`╭֔ ⠾ 💉REGISTRO OBLIGATORIO╮
+
+> Debes registrarte antes de usar comandos.
+│
+│ 𝗨𝘀𝗮:
+│ ${usedPrefix}reg nombre.edad
+│
+│ 𝗘𝗷𝗲𝗺𝗽𝗹𝗼:
+│ ${usedPrefix}reg nanno.age
+╰────────────`)
+}
+
+
+
 try {
 await client.readMessages([m.key])
 user.usedcommands = (user.usedcommands || 0) + 1
@@ -175,7 +230,7 @@ user.name = m.pushName
 users.stats[today].cmds++
 await cmdData.run(client, m, args, usedPrefix, command, text)
 } catch (error) {
-await client.sendMessage(m.chat, { text: `《✧》 Error al ejecutar el comando\n${error}` }, { quoted: m })
+await client.sendMessage(m.chat, { text: 𐄹 ۪ ׁ ⚠️ᩚ̼ 𖹭̫ ▎ Error al ejecutar el comando\n${error} }, { quoted: m })
 }
 level(m)
 }

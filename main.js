@@ -11,12 +11,10 @@ seeCommands()
 export default async (client, m) => {
 if (!m.message) return
 
-const sender = m.sender
-const from = m.key.remoteJid
-
+/* ================= MESSAGE PARSER PRO ================= */
 const msg = m.message
 
-const text =
+const text = (
 msg?.conversation ||
 msg?.extendedTextMessage?.text ||
 msg?.imageMessage?.caption ||
@@ -31,16 +29,22 @@ msg?.ephemeralMessage?.message?.extendedTextMessage?.text ||
 msg?.viewOnceMessage?.message?.conversation ||
 msg?.viewOnceMessage?.message?.extendedTextMessage?.text ||
 ''
+).trim()
+
+if (!text) return
 
 /* ================= INIT ================= */
 initDB(m, client)
 antilink(client, m)
 
-/* ================= DEBUG (IMPORTANTE) ================= */
+/* ================= DEBUG ================= */
 const DEBUG = true
 const log = (...a) => DEBUG && console.log('[BOT]', ...a)
 
-/* ================= SETTINGS ================= */
+/* ================= BASIC INFO ================= */
+const sender = m.sender
+const from = m.key.remoteJid
+
 const botJid = client.user.id.split(':')[0] + '@s.whatsapp.net'
 const chat = global.db.data.chats[from] ||= {}
 const settings = global.db.data.settings[botJid] ||= {}
@@ -48,52 +52,42 @@ const user = global.db.data.users[sender] ||= {}
 
 const namebot = settings.namebot || 'Yuki'
 
-/* ================= PREFIX SIMPLE & ROBUSTO ================= */
-const prefixes = [
+/* ================= SIMPLE PREFIX (PRO FIX) ================= */
+const prefixes = new Set([
 namebot,
 namebot.charAt(0),
 (namebot.split(' ')[0] || ''),
 '!',
 '.',
-'/', 
-'#', 
-'.', 
-]
+'/',
+'#'
+])
 
-const prefixRegex = new RegExp(
-'^(' + prefixes.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')',
-'i'
-)
+const prefix = [...prefixes]
+.find(p => text.startsWith(p))
 
-const match = text.match(prefixRegex)
-
-if (!match) {
-log('❌ Sin prefix:', text)
+if (!prefix) {
+if (DEBUG) log('❌ Sin prefix:', text)
 return
 }
 
-const usedPrefix = match[0]
-const raw = text.slice(usedPrefix.length).trim()
+const raw = text.slice(prefix.length).trim()
 const args = raw.split(/\s+/)
 
 const command = (args.shift() || '').toLowerCase()
 const body = args.join(' ')
 
+if (!command) return
+
 log('✔ comando detectado:', command)
 
-/* ================= COMMAND EMPTY ================= */
-if (!command) {
-log('❌ comando vacío')
-return
-}
-
-/* ================= PRIMARY BOT BLOCK FIXED ================= */
+/* ================= PRIMARY BOT ================= */
 if (chat.primaryBot && chat.primaryBot !== botJid) {
-log('⚠ primaryBot bloquea ejecución:', chat.primaryBot)
+log('⚠ primaryBot bloquea ejecución')
 return
 }
 
-/* ================= GROUP INFO SAFE ================= */
+/* ================= GROUP INFO FIX ================= */
 let isAdmins = false
 let isBotAdmins = false
 
@@ -102,37 +96,34 @@ try {
 const metadata = await client.groupMetadata(from)
 const participants = metadata?.participants || []
 
-const admins = participants.filter(p => p.admin)
+isAdmins = participants.some(p =>
+(p.admin === 'admin' || p.admin === 'superadmin') &&
+(p.id || p.jid || p.lid) === sender
+)
 
-isAdmins = admins.some(p => p.id === sender)
-isBotAdmins = admins.some(p => p.id === botJid)
+isBotAdmins = participants.some(p =>
+(p.admin === 'admin' || p.admin === 'superadmin') &&
+(p.id || p.jid || p.lid) === botJid
+)
 
 } catch (e) {
-log('⚠ error groupMetadata:', e.message)
+log('⚠ group error:', e.message)
 }
 }
 
-/* ================= COMMAND LOADER ================= */
+/* ================= COMMAND ================= */
 const cmdData = global.comandos.get(command)
 
-if (!cmdData) {
-log('❌ comando no registrado:', command)
-return m.reply?.(`⚠ El comando *${command}* no existe.`)
-}
+if (!cmdData) return
 
 /* ================= PERMISSIONS ================= */
-if (cmdData.isOwner && !global.owner.includes(sender.split('@')[0])) {
-log('⛔ owner requerido')
-return
-}
+if (cmdData.isOwner && !global.owner.includes(sender.split('@')[0])) return
 
 if (cmdData.isAdmin && !isAdmins) {
-log('⛔ admin requerido')
 return m.reply?.('⚠ Solo administradores')
 }
 
 if (cmdData.botAdmin && !isBotAdmins) {
-log('⛔ bot admin requerido')
 return m.reply?.('⚠ Necesito ser admin')
 }
 
@@ -144,15 +135,15 @@ user.usedcommands = (user.usedcommands || 0) + 1
 
 log('🚀 ejecutando:', command)
 
-await cmdData.run(client, m, args, usedPrefix, command, body)
+await cmdData.run(client, m, args, prefix, command, body)
 
 level(m)
 
 } catch (e) {
-console.log('❌ ERROR CMD:', command, e)
+log('❌ ERROR:', e.message)
 
 await client.sendMessage(from, {
-text: '❌ Error ejecutando comando:\n' + e.message
+text: '❌ Error:\n' + e.message
 }, { quoted: m })
 }
 }

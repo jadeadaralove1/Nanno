@@ -124,7 +124,15 @@ return [regex.exec(m.text), regex]
 })
 : [[new RegExp(strRegex(pluginPrefix)).exec(m.text), new RegExp(strRegex(pluginPrefix))]]
 
-let match = matchs.find(p => p[0])
+const text = m.text || body || ''
+
+let match = matchs.find(p => {
+  try {
+    return p[1]?.test?.(text)
+  } catch {
+    return false
+  }
+})
 
 for (const name in global.plugins) {
 const plugin = global.plugins[name]

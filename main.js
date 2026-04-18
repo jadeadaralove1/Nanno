@@ -47,7 +47,9 @@ namebot.charAt(0),
 (namebot.split(' ')[0] || ''),
 '!',
 '.',
-'/'
+'/', 
+'#', 
+'.', 
 ]
 
 const prefixRegex = new RegExp(

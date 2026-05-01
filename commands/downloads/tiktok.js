@@ -9,7 +9,7 @@ export default {
     }
     const text = args.join(" ")
     const isUrl = /(?:https:?\/{2})?(?:w{3}|vm|vt|t)?\.?tiktok.com\/([^\s&]+)/gi.test(text)
-    const endpoint = isUrl  ? `${global.APIs.stellar.url}/dl/tiktok?url=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}` : `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`
+    const endpoint = `https://tikwm.com/api/?url=${encodeURIComponent(text)}&hd=1`
     try {
       const res = await fetch(endpoint)
       if (!res.ok) throw new Error(`El servidor respondió con ${res.status}`)

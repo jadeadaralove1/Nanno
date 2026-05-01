@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import fileTypePkg from 'file-type'
+import * as fileTypePkg from 'file-type'
 import { promises as fsp } from 'fs'
 import os from 'os'
 import path from 'path'

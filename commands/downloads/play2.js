@@ -58,23 +58,37 @@ export default {
 
 async function getVideoFromApis(url) {
   const apis = [
-    { api: 'Adonix', endpoint: `${global.APIs.adonix.url}/download/ytvideo?apikey=${global.APIs.adonix.key}&url=${encodeURIComponent(url)}`, extractor: res => res?.data?.url },    
-    { api: 'Vreden', endpoint: `${global.APIs.vreden.url}/api/v1/download/youtube/video?url=${encodeURIComponent(url)}&quality=360`, extractor: res => res.result?.download?.url },
-    { api: 'Stellar', endpoint: `${global.APIs.stellar.url}/dl/ytdl?url=${encodeURIComponent(url)}&format=mp4&key=${global.APIs.stellar.key}`, extractor: res => res.result?.download },
-    { api: 'Nekolabs', endpoint: `${global.APIs.nekolabs.url}/downloader/youtube/v1?url=${encodeURIComponent(url)}&format=360`, extractor: res => res.result?.downloadUrl },
-    { api: 'Vreden v2', endpoint: `${global.APIs.vreden.url}/api/v1/download/play/video?query=${encodeURIComponent(url)}`, extractor: res => res.result?.download?.url }
+    {
+      api: 'Delirius',
+      endpoint: `https://api.delirius.store/download/ytmp4?url=${encodeURIComponent(url)}&format=360p`,
+      extractor: res => res?.data?.download || res?.data?.url
+    },
+    {
+      api: 'EliteProTech',
+      endpoint: `https://eliteprotech-apis.zone.id/ytdown?url=${encodeURIComponent(url)}&format=mp4`,
+      extractor: res => res?.result?.download || res?.result?.url
+    }
   ]
 
   for (const { api, endpoint, extractor } of apis) {
     try {
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 10000)
-      const res = await fetch(endpoint, { signal: controller.signal }).then(r => r.json())
+
+      const res = await fetch(endpoint, { signal: controller.signal })
+        .then(r => r.json())
+
       clearTimeout(timeout)
+
       const link = extractor(res)
       if (link) return { url: link, api }
-    } catch (e) {}
+
+    } catch (e) {
+      console.log(`Error con API ${api}:`, e.message)
+    }
+
     await new Promise(resolve => setTimeout(resolve, 500))
   }
+
   return null
 }

@@ -8,57 +8,48 @@ export default {
 
   run: async (client, m, args, usedPrefix, command) => {
     if (!args.length) {
-      return m.reply('𐄹 ۪ ׁ 🥌 ▎ Ingresa un término o enlace de TikTok.')
+      return m.reply('《✧》 Ingresa búsqueda o link.')
     }
 
     const text = args.join(" ")
-    const isUrl = /(?:https?:\/\/)?(?:www\.|vm\.|vt\.)?tiktok\.com\/[^\s]+/i.test(text)
+    const isUrl = /tiktok\.com\/[^\s]+/i.test(text)
+
+    const endpoint = isUrl
+      ? `${global.APIs.stellar.url}/dl/tiktok?url=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`
+      : `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`
 
     try {
-
-      // =========================
-      // 📥 DESCARGA
-      // =========================
-      if (isUrl) {
-
-        const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(text)}&hd=1`)
-        const json = await res.json()
-
-        if (!json?.data?.play) {
-          return m.reply('𐄹 ▎ No se pudo obtener el video.')
-        }
-
-        const d = json.data
-
-        return await client.sendMessage(m.chat, {
-          video: { url: d.play },
-          caption: `𓋜 TIKTOK
-
-⌗ Título:
-> ${d.title || 'Sin título'}
-
-⌗ Autor:
-> ${d.author?.nickname || 'Desconocido'}
-
-⌗ Likes:
-> ${(d.digg_count || 0).toLocaleString()}`
-        }, { quoted: m })
-      }
-
-      // =========================
-      // 🔎 BÚSQUEDA
-      // =========================
-      const endpoint = `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`
 
       const res = await fetch(endpoint)
       const json = await res.json()
 
-      if (!json?.status || !Array.isArray(json?.data)) {
-        return m.reply('𐄹 ▎ Sin resultados.')
+      if (!json?.status) {
+        return m.reply('《✧》 Sin resultados.')
       }
 
-      // 🔥 LIMITAMOS A 3 (importante)
-      const results = json.data.slice(0, 3)
+      // =========================
+      // 📥 DESCARGA DIRECTA
+      // =========================
+      if (isUrl) {
+
+        const d = json.data
+        const url = Array.isArray(d.dl) ? d.dl[0] : d.dl
+
+        return await client.sendMessage(m.chat, {
+          video: { url },
+          caption: `𓋜 TIKTOK\n\n${d.title || 'Sin título'}`
+        }, { quoted: m })
+      }
+
+      // =========================
+      // 🔎 BÚSQUEDA → 10 VIDEOS
+      // =========================
+
+      const results = (json.data || []).slice(0, 10)
+
+      if (!results.length) {
+        return m.reply('《✧》 No se encontraron videos.')
+      }
 
       const medias = []
 
@@ -67,39 +58,37 @@ export default {
         if (!v?.url) continue
 
         try {
-          // 🧠 delay anti-rate-limit
-          await sleep(1200)
+          await sleep(1000) // 🔥 anti rate-limit
 
-          const dl = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(v.url)}&hd=1`)
+          const dl = await fetch(
+            `https://tikwm.com/api/?url=${encodeURIComponent(v.url)}&hd=1`
+          )
+
           const j = await dl.json()
 
-          if (!j?.data?.play) continue
+          const videoUrl = j?.data?.play
+          if (!videoUrl) continue
 
           medias.push({
             type: 'video',
-            data: { url: j.data.play },
+            data: { url: videoUrl },
             caption: `𓋜 TIKTOK
 
-⌗ Título:
-> ${v.title || 'Sin título'}
-
-⌗ Likes:
-> ${(v.stats?.likes || 0).toLocaleString()}`
+⌗ ${v.title || 'Sin título'}
+⌗ ${v.author?.nickname || 'Desconocido'}`
           })
 
-        } catch {
-          continue
-        }
+        } catch {}
       }
 
       if (!medias.length) {
-        return m.reply('𐄹 ▎ No se pudieron procesar los videos.')
+        return m.reply('《✧》 No se pudieron cargar los videos.')
       }
 
       await client.sendAlbumMessage(m.chat, medias, { quoted: m })
 
     } catch (e) {
-      return m.reply(`Error en ${usedPrefix + command}\n${e.message}`)
+      return m.reply(`Error:\n${e.message}`)
     }
   }
 }

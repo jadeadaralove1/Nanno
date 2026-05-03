@@ -118,7 +118,8 @@ else {
 
     await client.sendAlbumMessage(m.chat, medias, { quoted: m })
 
-  } catch (e) {
-    await m.reply(`> Error en *${usedPrefix + command}*\n> ${e.message}`)
+} catch (e) {
+      await m.reply(`> Error en *${usedPrefix + command}*\n> ${e.message}`)
+    }
   }
 }

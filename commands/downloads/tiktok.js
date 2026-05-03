@@ -63,66 +63,62 @@ await client.sendMessage(m.chat, {
   // ==============================  
 // 🔎 BÚSQUEDA (Stellar)  
 // ==============================  
-else {  
+else {
 
-  const endpoint = `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`  
-
-  const res = await fetch(endpoint)
-const json = await res.json()
-
-const rawData =
-  json?.data?.data ||
-  json?.data?.videos ||
-  json?.data ||
-  json?.result ||
-  []
-
-if (!Array.isArray(rawData) || rawData.length === 0) {
-  return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ La API no devolvió resultados válidos.')
-}
-
-const results = rawData.slice(0, 5)
-
-const medias = []
-
-for (const v of results) {
-
-  const tiktokUrl = v.url || v.link || v.share_url
-  if (!tiktokUrl) continue
+  const endpoint = `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`
 
   try {
 
-    const dl = await fetch(
-      `https://tikwm.com/api/?url=${encodeURIComponent(tiktokUrl)}&hd=1`
-    )
+    const res = await fetch(endpoint)
+    const json = await res.json()
 
-    const dlJson = await dl.json()
+    const rawData =
+      json?.data?.data ||
+      json?.data?.videos ||
+      json?.data ||
+      json?.result ||
+      []
 
-    const videoUrl = dlJson?.data?.play
-    if (!videoUrl) continue
+    if (!Array.isArray(rawData) || rawData.length === 0) {
+      return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ No hay resultados válidos.')
+    }
 
-    medias.push({
-      type: 'video',
-      data: { url: videoUrl },
-      caption: `𓋜 TIKTOK\n\n${v.title || 'Sin título'}`
-    })
+    const results = rawData.slice(0, 5)
 
-  } catch {}
-}
-      continue  
-    }  
-  }  
+    const medias = []
 
-  if (!medias.length) {  
-    return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ No se pudieron procesar los videos.')  
-  }  
+    for (const v of results) {
 
-  await client.sendAlbumMessage(m.chat, medias, { quoted: m })  
-}
+      const tiktokUrl = v.url || v.link || v.share_url
+      if (!tiktokUrl) continue
 
-} catch (e) {  
-  await m.reply(`> Error en *${usedPrefix + command}*\n> ${e.message}`)  
-}
+      try {
 
-},
+        const dl = await fetch(
+          `https://tikwm.com/api/?url=${encodeURIComponent(tiktokUrl)}&hd=1`
+        )
+
+        const dlJson = await dl.json()
+
+        const videoUrl = dlJson?.data?.play
+        if (!videoUrl) continue
+
+        medias.push({
+          type: 'video',
+          data: { url: videoUrl },
+          caption: `𓋜 TIKTOK\n\n${v.title || 'Sin título'}`
+        })
+
+      } catch {}
+    }
+
+    if (!medias.length) {
+      return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ No se pudieron procesar los videos.')
+    }
+
+    await client.sendAlbumMessage(m.chat, medias, { quoted: m })
+
+  } catch (e) {
+    await m.reply(`> Error en *${usedPrefix + command}*\n> ${e.message}`)
+  }
 }

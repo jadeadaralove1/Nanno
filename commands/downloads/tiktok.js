@@ -67,50 +67,48 @@ else {
 
   const endpoint = `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`  
 
-  const res = await fetch(endpoint)  
-  const json = await res.json()  
+  const res = await fetch(endpoint)
+const json = await res.json()
 
-  if (!json?.status || !Array.isArray(json?.data)) {  
-    return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ No se encontraron resultados.')  
-  }  
+const rawData =
+  json?.data?.data ||
+  json?.data?.videos ||
+  json?.data ||
+  json?.result ||
+  []
 
-  const results = json.data.slice(0, 5)  
+if (!Array.isArray(rawData) || rawData.length === 0) {
+  return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ La API no devolvió resultados válidos.')
+}
 
-  const medias = []  
+const results = rawData.slice(0, 5)
 
-  for (const v of results) {  
+const medias = []
 
-    // 🔥 FIX IMPORTANTE: múltiples posibles campos
-    const tiktokUrl = v.url || v.link || v.share_url  
+for (const v of results) {
 
-    if (!tiktokUrl) continue  
+  const tiktokUrl = v.url || v.link || v.share_url
+  if (!tiktokUrl) continue
 
-    try {  
+  try {
 
-      const dlRes = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(tiktokUrl)}&hd=1`)  
-      const dlJson = await dlRes.json()  
+    const dl = await fetch(
+      `https://tikwm.com/api/?url=${encodeURIComponent(tiktokUrl)}&hd=1`
+    )
 
-      const videoUrl = dlJson?.data?.play  
-      if (!videoUrl) continue  
+    const dlJson = await dl.json()
 
-      const caption = `᪤  ׅ🍒    ֹ     ઇTIKTOK३  ׅ𓋜ֹֹ
+    const videoUrl = dlJson?.data?.play
+    if (!videoUrl) continue
 
-⌗ ⬭ Título:
-> ${v.title || 'Sin título'}
+    medias.push({
+      type: 'video',
+      data: { url: videoUrl },
+      caption: `𓋜 TIKTOK\n\n${v.title || 'Sin título'}`
+    })
 
-⌗ Autor:
-> ${v.author?.nickname || 'Desconocido'}
-
-⌗ Likes:
-> ${(v.stats?.likes || 0).toLocaleString()}`  
-
-      medias.push({  
-        type: 'video',  
-        data: { url: videoUrl },  
-        caption  
-      })  
-
-    } catch (e) {  
+  } catch {}
+}
       continue  
     }  
   }  

@@ -130,5 +130,3 @@ medias.push({
 
 },
 }
-
-Toma. Arréglalo. Tiene que andar la búsqueda y las descargas.

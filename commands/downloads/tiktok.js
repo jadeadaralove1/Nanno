@@ -61,68 +61,66 @@ await client.sendMessage(m.chat, {
   }   
 
   // ==============================  
-  // 🔎 BÚSQUEDA (Stellar)  
-  // ==============================  
-  else {  
-    const endpoint = `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`  
+// 🔎 BÚSQUEDA (Stellar)  
+// ==============================  
+else {  
 
-    const res = await fetch(endpoint)  
-    const json = await res.json()  
+  const endpoint = `${global.APIs.stellar.url}/search/tiktok?query=${encodeURIComponent(text)}&key=${global.APIs.stellar.key}`  
 
-    if (!json?.status || !json?.data?.length) {  
-      return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ 𖹭̫ ▎ No se encontraron resultados.')  
-    }  
+  const res = await fetch(endpoint)  
+  const json = await res.json()  
 
-    const results = json.data.slice(0, 5)  
+  if (!json?.status || !Array.isArray(json?.data)) {  
+    return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ No se encontraron resultados.')  
+  }  
 
-    const medias = []  
+  const results = json.data.slice(0, 5)  
 
-    for (const v of results) {  
-      if (!v.url) continue  
+  const medias = []  
 
-      try {  
-        // 🔥 cada resultado lo paso por TikWM  
-        const dlRes = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(v.url)}&hd=1`)  
-        const dlJson = await dlRes.json()  
+  for (const v of results) {  
 
-        const videoUrl = dlJson?.data?.play  
-        if (!videoUrl) continue  
+    // 🔥 FIX IMPORTANTE: múltiples posibles campos
+    const tiktokUrl = v.url || v.link || v.share_url  
 
-        const caption = `᪤  ׅ🍒    ֹ     ઇTIKTOK३  ׅ𓋜ֹֹ
+    if (!tiktokUrl) continue  
+
+    try {  
+
+      const dlRes = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(tiktokUrl)}&hd=1`)  
+      const dlJson = await dlRes.json()  
+
+      const videoUrl = dlJson?.data?.play  
+      if (!videoUrl) continue  
+
+      const caption = `᪤  ׅ🍒    ֹ     ઇTIKTOK३  ׅ𓋜ֹֹ
 
 ⌗ ⬭ Título:
-
 > ${v.title || 'Sin título'}
 
-
-
 ⌗ Autor:
-
 > ${v.author?.nickname || 'Desconocido'}
 
-
-
 ⌗ Likes:
+> ${(v.stats?.likes || 0).toLocaleString()}`  
 
-> ${(v.stats?.likes || 0).toLocaleString()}`
+      medias.push({  
+        type: 'video',  
+        data: { url: videoUrl },  
+        caption  
+      })  
 
-
-
-medias.push({  
-          type: 'video',  
-          data: { url: videoUrl },  
-          caption  
-        })  
-
-      } catch {}  
+    } catch (e) {  
+      continue  
     }  
-
-    if (!medias.length) {  
-      return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ 𖹭̫ ▎ No se pudieron procesar los resultados.')  
-    }  
-
-    await client.sendAlbumMessage(m.chat, medias, { quoted: m })  
   }  
+
+  if (!medias.length) {  
+    return m.reply('𐄹 ۪ ׁ 😺ᩚ̼ ▎ No se pudieron procesar los videos.')  
+  }  
+
+  await client.sendAlbumMessage(m.chat, medias, { quoted: m })  
+}
 
 } catch (e) {  
   await m.reply(`> Error en *${usedPrefix + command}*\n> ${e.message}`)  

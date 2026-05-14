@@ -2,12 +2,25 @@ import fetch from 'node-fetch'
 import { proto } from '@whiskeysockets/baileys'
 import chalk from 'chalk'
 
+const groupMetadataCache = new Map()
+const metadataTTL = 60000
+
+async function safeGroupMetadata(client, id) {
+  const cached = groupMetadataCache.get(id)
+  if (cached && Date.now() - cached.time < metadataTTL) return cached.data
+
+  const data = await client.groupMetadata(id).catch(() => null)
+  if (data) groupMetadataCache.set(id, { data, time: Date.now() })
+
+  return data
+}
+
 export default async (client, m) => {
 
   client.ev.on('group-participants.update', async (anu) => {
     try {
 
-      const metadata = await client.groupMetadata(anu.id).catch(() => null)
+      const metadata = await safeGroupMetadata(client, anu.id)
       if (!metadata) return
 
       const groupAdmins =
@@ -168,7 +181,7 @@ ${mensajes[anu.action] || ''}
 
     const phone = actor.split('@')[0]
 
-    const groupMetadata = await client.groupMetadata(id).catch(() => null)
+    const groupMetadata = await safeGroupMetadata(client, id)
     const groupAdmins =
       groupMetadata?.participants?.filter(p =>
         p.admin === 'admin' || p.admin === 'superadmin'

@@ -167,8 +167,20 @@ let groupMetadata = null
 let groupAdmins = []
 let groupName = ''
 
+// 🔥 FIX RATE LIMIT: CACHE GROUP METADATA
 if (m.isGroup) {
-groupMetadata = await client.groupMetadata(m.chat).catch(() => null)
+if (!global.groupCache) global.groupCache = {}
+
+if (!global.groupCache[m.chat]) {
+global.groupCache[m.chat] = await client.groupMetadata(m.chat).catch(() => null)
+
+setTimeout(() => {
+delete global.groupCache[m.chat]
+}, 60000)
+}
+
+groupMetadata = global.groupCache[m.chat]
+
 groupName = groupMetadata?.subject || ''
 groupAdmins = groupMetadata?.participants?.filter(p =>
 p.admin === 'admin' || p.admin === 'superadmin'

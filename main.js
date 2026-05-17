@@ -167,12 +167,23 @@ let groupMetadata = null
 let groupAdmins = []
 let groupName = ''
 
-// 🔥 FIX RATE LIMIT: CACHE GROUP METADATA
+// 🔥 FIX REAL: anti rate-limit + lock
 if (m.isGroup) {
 if (!global.groupCache) global.groupCache = {}
+if (!global.groupLock) global.groupLock = {}
 
 if (!global.groupCache[m.chat]) {
-global.groupCache[m.chat] = await client.groupMetadata(m.chat).catch(() => null)
+
+if (global.groupLock[m.chat]) {
+await new Promise(res => setTimeout(res, 500))
+}
+
+global.groupLock[m.chat] = true
+
+global.groupCache[m.chat] =
+await client.groupMetadata(m.chat).catch(() => null)
+
+global.groupLock[m.chat] = false
 
 setTimeout(() => {
 delete global.groupCache[m.chat]

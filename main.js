@@ -37,7 +37,7 @@ if (chat.reacciones === undefined) chat.reacciones = true
 if (!m.fromMem && body && chat.reacciones) {
 
 const palabras = /(bot|nanno|Bot|Robot|ia|Six seven|sixseven|botsito|:v)/gi
-const reaccionRandom = Math.random() < 0.01
+const reaccionRandom = Math.random() < 0
 
 if (body.match(palabras) || reaccionRandom) {
 

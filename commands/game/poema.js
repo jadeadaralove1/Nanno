@@ -40,7 +40,7 @@ export default {
 ${poema}
 
 ──────────────
-✨ generado en el vacío
+✨generado por nanno
 ──────────────`
 
       await client.sendMessage(m.chat, {

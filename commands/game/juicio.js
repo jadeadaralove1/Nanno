@@ -4,137 +4,198 @@ export default {
 
   run: async (client, m, args) => {
     try {
-      await client.sendMessage(m.chat, {
-        react: { text: '⚖️', key: m.key }
-      })
+      global.tribunal = global.tribunal || {}
+      const chat = m.chat
+      const sub = (args[0] || '').toLowerCase()
 
-      const mentions =
-        m.mentionedJid ||
-        m.message?.extendedTextMessage?.contextInfo?.mentionedJid ||
-        []
+      const data = global.tribunal[chat]
 
-      const acusado = mentions[0]
-      const abogado = mentions[1]
+      // ─────────────────────────────
+      // 🧾 INICIAR JUICIO
+      // ─────────────────────────────
+      if (sub === '' || sub === 'iniciar') {
+        const mentions =
+          m.mentionedJid ||
+          m.message?.extendedTextMessage?.contextInfo?.mentionedJid ||
+          []
 
-      if (!acusado || !abogado) {
-        return client.reply(
-          m.chat,
-`⚖️ TRIBUNAL SUPREMO
+        const acusado = mentions[0]
 
-Debes asignar roles:
+        if (!acusado) {
+          return client.reply(
+            chat,
+`⚖️ USO:
 
-.juicio @acusado @abogado
+.juicio @acusado
 
-Sin eso no hay proceso legal.`,
-          m
-        )
+Subcomandos:
+.defensa
+.testigo @user texto
+.prueba texto
+.cerrar`,
+            m
+          )
+        }
+
+        global.tribunal[chat] = {
+          acusado,
+          abogado: m.sender,
+          pruebas: [],
+          testigos: [],
+          defensa: '',
+          delito: [
+            'alteración del orden del chat',
+            'exceso de comportamiento sospechoso',
+            'interferencia narrativa leve',
+            'uso excesivo de emojis ilegales',
+            'desbalance emocional del grupo'
+          ][Math.floor(Math.random() * 5)]
+        }
+
+        return client.sendMessage(chat, {
+          text:
+`╔════════════════════╗
+        ⚖️ JUICIO ABIERTO
+╚════════════════════╝
+
+👤 Acusado: @${acusado.split('@')[0]}
+🧑‍⚖️ Abogado: @${m.sender.split('@')[0]}
+
+📜 Cargo:
+${global.tribunal[chat].delito}
+
+━━━━━━━━━━━━━━━━━━━━
+
+SUBCOMANDOS:
+• .juicio defensa [texto]
+• .juicio testigo @user [texto]
+• .juicio prueba [texto]
+• .juicio cerrar
+
+━━━━━━━━━━━━━━━━━━━━`,
+          mentions: [acusado, m.sender]
+        })
       }
 
-      const delitos = [
-        'alteración del flujo normal del chat',
-        'exceso de presencia narrativa',
-        'interferencia emocional en terceros',
-        'uso indebido de sarcasmo en entorno sensible',
-        'desestabilización del orden del grupo',
-        'comportamiento impredecible sin aviso',
-        'ruptura leve de la realidad percibida'
-      ]
+      if (!data) {
+        return client.reply(chat, '❌ No hay juicio activo.', m)
+      }
 
-      const pruebas = [
-        'registro parcial del sistema lo confirma',
-        'testigos contradictorios pero insistentes',
-        'evidencia emocional no verificable',
-        'el oráculo lo sugirió indirectamente',
-        'coincidencia estadística sospechosa',
-        'un error del sistema coincide con los hechos',
-        'un gato fue testigo no confiable'
-      ]
+      // ─────────────────────────────
+      // 🧑‍⚖️ DEFENSA
+      // ─────────────────────────────
+      if (sub === 'defensa') {
+        const texto = args.slice(1).join(' ')
+        if (!texto) return client.reply(chat, '🧑‍⚖️ Escribe tu defensa.', m)
 
-      const alegatos = [
-        'el acusado actuó bajo confusión narrativa',
-        'no hubo intención consciente comprobable',
-        'el contexto alteró la percepción de los hechos',
-        'el sistema influyó en su comportamiento',
-        'la situación era inherentemente ambigua'
-      ]
+        data.defensa = texto
 
-      const juradoOpiniones = [
-        'culpable según mayoría silenciosa',
-        'inocente con dudas persistentes',
-        'división total del jurado',
-        'veredicto emocionalmente influenciado',
-        'resultado inconcluso por exceso de caos'
-      ]
+        return client.sendMessage(chat, {
+          text:
+`🧑‍⚖️ DEFENSA REGISTRADA
 
-      const veredictos = [
-        'INOCENTE ABSOLUTO',
-        'INOCENTE CON SOSPECHA PERMANENTE',
-        'CULPABLE PARCIAL',
-        'CULPABLE SIMBÓLICO',
-        'CULPABLE TOTAL',
-        'VEREDICTO INDEFINIDO',
-        'CASO ARCHIVADO POR CAOS EXCESIVO'
-      ]
+"${texto}"`
+        })
+      }
 
-      const delito = delitos[Math.floor(Math.random() * delitos.length)]
-      const prueba = pruebas[Math.floor(Math.random() * pruebas.length)]
-      const alegato = alegatos[Math.floor(Math.random() * alegatos.length)]
-      const jurado = juradoOpiniones[Math.floor(Math.random() * juradoOpiniones.length)]
-      const veredicto = veredictos[Math.floor(Math.random() * veredictos.length)]
+      // ─────────────────────────────
+      // 👥 TESTIGO
+      // ─────────────────────────────
+      if (sub === 'testigo') {
+        const mentions =
+          m.mentionedJid ||
+          m.message?.extendedTextMessage?.contextInfo?.mentionedJid ||
+          []
 
-      const impacto = Math.floor(Math.random() * 100)
+        const user = mentions[0]
+        const texto = args.slice(2).join(' ')
 
-      const texto =
-`╔════════════════════════════╗
-        ⚖️ TRIBUNAL SUPREMO
-╚════════════════════════════╝
+        if (!user || !texto) {
+          return client.reply(chat, '👥 Uso: .juicio testigo @user texto', m)
+        }
 
-👤 ACUSADO:
-@${acusado.split('@')[0]}
+        data.testigos.push({ user, texto })
 
-🧑‍⚖️ ABOGADO DEFENSOR:
-@${abogado.split('@')[0]}
+        return client.sendMessage(chat, {
+          text:
+`👥 TESTIGO
 
-━━━━━━━━━━━━━━━━━━━━━━━
+@${user.split('@')[0]}:
+"${texto}"`,
+          mentions: [user]
+        })
+      }
 
-📜 CARGO PRINCIPAL:
-${delito}
+      // ─────────────────────────────
+      // 📂 PRUEBA
+      // ─────────────────────────────
+      if (sub === 'prueba') {
+        const texto = args.slice(1).join(' ')
+        if (!texto) return client.reply(chat, '📂 Escribe la prueba.', m)
 
-🔍 PRUEBAS PRESENTADAS:
-${prueba}
+        data.pruebas.push(texto)
 
-━━━━━━━━━━━━━━━━━━━━━━━
+        return client.sendMessage(chat, {
+          text:
+`📂 PRUEBA AÑADIDA
 
-🎤 ALEGATO DE DEFENSA:
-"${alegato}"
+"${texto}"`
+        })
+      }
 
-📊 IMPACTO LEGAL:
-${impacto}%
+      // ─────────────────────────────
+      // ⚖️ CERRAR JUICIO
+      // ─────────────────────────────
+      if (sub === 'cerrar') {
+        const score =
+          Math.floor(Math.random() * 40) +
+          data.pruebas.length * 10 +
+          data.testigos.length * 5
 
-━━━━━━━━━━━━━━━━━━━━━━━
+        let veredicto =
+          score > 80 ? 'INOCENTE ABSOLUTO' :
+          score > 50 ? 'INOCENTE CON DUDAS' :
+          score > 25 ? 'CULPABLE PARCIAL' :
+          'CULPABLE TOTAL'
 
-👥 VEREDICTO DEL JURADO:
-${jurado}
+        const acusado = data.acusado
 
-⚖️ FALLO FINAL DEL JUEZ:
+        const texto =
+`╔════════════════════╗
+        ⚖️ VEREDICTO FINAL
+╚════════════════════╝
+
+👤 Acusado: @${acusado.split('@')[0]}
+
+📜 Delito:
+${data.delito}
+
+🧑‍⚖️ Defensa:
+"${data.defensa || 'Sin defensa'}"
+
+👥 Testigos: ${data.testigos.length}
+📂 Pruebas: ${data.pruebas.length}
+
+━━━━━━━━━━━━━━━━━━━━
+
+⚖️ RESULTADO:
 ${veredicto}
 
-━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━
 
-📌 OBSERVACIÓN FINAL:
-"Ningún juicio aquí es completamente justo,
-pero todos son definitivos."
+📌 Caso cerrado.`
 
-⚖️ Sesión cerrada.`
+        delete global.tribunal[chat]
 
-      await client.sendMessage(m.chat, {
-        text: texto,
-        mentions: [acusado, abogado]
-      })
+        return client.sendMessage(chat, {
+          text,
+          mentions: [acusado]
+        })
+      }
 
     } catch (e) {
       console.error(e)
-      client.reply(m.chat, '❌ El tribunal colapsó bajo exceso de evidencia contradictoria.', m)
+      client.reply(m.chat, '❌ Error en el tribunal.', m)
     }
   }
 }

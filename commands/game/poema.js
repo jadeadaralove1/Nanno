@@ -13,38 +13,22 @@ export default {
         m.message?.extendedTextMessage?.contextInfo?.mentionedJid ||
         []
 
-      let user = mentions[0] || m.sender
-      let nombre = ''
+      let user = mentions[0]
 
-      try {
-        nombre = await client.getName(user)
-      } catch {
-        nombre = 'alguien'
-      }
+      // si no hay mención → "alguien"
+      if (!user) user = null
 
       const poemas = [
-        `No es ${nombre} quien se pierde,\nes el mundo que no sabe sostenerlo.`,
+        `no se nota cuando llega,\npero todo cambia cuando ${user ? '@' + user.split('@')[0] : 'alguien'} aparece.`,
 
-        `${nombre} camina como si el tiempo dudara antes de tocarlo.`,
+        `${user ? '@' + user.split('@')[0] : 'alguien'} no hace ruido,\npero desordena el tiempo igual.`,
 
-        `Si miras bien, ${nombre} no está quieto,\nsolo negocia con la realidad.`,
+        `el mundo finge normalidad\nhasta que ${user ? '@' + user.split('@')[0] : 'alguien'} lo mira.`,
 
-        `El silencio reconoce a ${nombre}\ny por eso no lo interrumpe.`,
+        `hay cosas que solo existen\ncuando ${user ? '@' + user.split('@')[0] : 'alguien'} las piensa.`,
 
-        `${nombre} existe en un lugar donde las cosas todavía no deciden ser reales.`,
-
-        `Cuando ${nombre} aparece,\nla historia cambia de tono.`
+        `${user ? '@' + user.split('@')[0] : 'alguien'} no está perdido,\nes el mapa el que no lo entiende.`
       ]
-
-      const raro = Math.floor(Math.random() * 100)
-
-      let extra = ''
-      if (raro === 0) {
-        extra =
-`\n⚠️ VERSO ANÓMALO
-
-${nombre} ha sido detectado fuera del poema.`
-      }
 
       const poema = poemas[Math.floor(Math.random() * poemas.length)]
 
@@ -53,18 +37,15 @@ ${nombre} ha sido detectado fuera del poema.`
       🖋️ POESÍA
 ╚════════════════╝
 
-@${user.split('@')[0]}
-
 ${poema}
-${extra}
 
 ──────────────
-✨ inspirado en: ${nombre}
+✨ generado en el vacío
 ──────────────`
 
       await client.sendMessage(m.chat, {
         text: texto,
-        mentions: [user]
+        mentions: user ? [user] : []
       })
 
     } catch (e) {

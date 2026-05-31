@@ -145,33 +145,23 @@ ${profecia}`
 
   const texto =
 
-`╔════════════════╗
-🔮 ORÁCULO 🔮
-╚════════════════╝
+`🔮━━━━━━━━━━━━🔮
+      ORÁCULO
+🔮━━━━━━━━━━━━🔮
 
-❓ Pregunta:
+❓ ${pregunta}
 
-"${pregunta}"
+╭─ Respuesta
+╰➤ ${respuesta}
 
-━━━━━━━━━━━━━━━
+🎲 Fortuna: ${suerte}/100
+🍀 ${fortuna}
 
-${respuesta}
+📜 Profecía:
+"Las respuestas cambian.
+Las decisiones permanecen."
 
-━━━━━━━━━━━━━━━
-
-🎲 Nivel de fortuna:
-${suerte}/100
-
-${fortuna}
-
-━━━━━━━━━━━━━━━
-
-📖 Mensaje final:
-
-"El destino cambia cada vez que alguien
-decide actuar."
-
-🔮 Consulta finalizada.`
+🔮━━━━━━━━━━━━🔮`
 
   await client.sendMessage(m.chat, {
     text: texto, 

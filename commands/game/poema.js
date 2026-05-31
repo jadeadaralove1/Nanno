@@ -8,24 +8,32 @@ export default {
         react: { text: '🖋️', key: m.key }
       })
 
-      const nombre = args.join(' ').trim() || m.pushName || 'alguien'
+      const mentions =
+        m.mentionedJid ||
+        m.message?.extendedTextMessage?.contextInfo?.mentionedJid ||
+        []
+
+      let user = mentions[0] || m.sender
+      let nombre = ''
+
+      try {
+        nombre = await client.getName(user)
+      } catch {
+        nombre = 'alguien'
+      }
 
       const poemas = [
-        `${nombre} camina sin ruido,\ncomo si el mundo le debiera silencio.`,
+        `No es ${nombre} quien se pierde,\nes el mundo que no sabe sostenerlo.`,
 
-        `No es ${nombre} quien se pierde,\nes el día que no sabe dónde ponerlo.`,
+        `${nombre} camina como si el tiempo dudara antes de tocarlo.`,
 
-        `${nombre} no pregunta,\nsolo observa cómo todo cambia de lugar.`,
+        `Si miras bien, ${nombre} no está quieto,\nsolo negocia con la realidad.`,
 
-        `Si buscas a ${nombre},\nya se volvió parte del viento.`,
+        `El silencio reconoce a ${nombre}\ny por eso no lo interrumpe.`,
 
-        `${nombre} existe en un punto extraño del tiempo,\ndonde las cosas todavía no terminan de decidir qué son.`,
+        `${nombre} existe en un lugar donde las cosas todavía no deciden ser reales.`,
 
-        `A ${nombre} le siguen las sombras,\nno porque lo persigan,\nsino porque no quieren perderse nada.`,
-
-        `${nombre} no llega tarde.\nEs el tiempo el que no sabe esperarlo.`,
-
-        `Cuando ${nombre} habla,\nel mundo baja un poco el volumen.`
+        `Cuando ${nombre} aparece,\nla historia cambia de tono.`
       ]
 
       const raro = Math.floor(Math.random() * 100)
@@ -33,10 +41,9 @@ export default {
       let extra = ''
       if (raro === 0) {
         extra =
-`\n\n⚠️ POEMA NO REGISTRADO
+`\n⚠️ VERSO ANÓMALO
 
-Este verso no debería existir.
-Pero ${nombre} lo hizo aparecer.`
+${nombre} ha sido detectado fuera del poema.`
       }
 
       const poema = poemas[Math.floor(Math.random() * poemas.length)]
@@ -46,20 +53,23 @@ Pero ${nombre} lo hizo aparecer.`
       🖋️ POESÍA
 ╚════════════════╝
 
+@${user.split('@')[0]}
+
 ${poema}
 ${extra}
 
 ──────────────
-✨ generado para: ${nombre}
+✨ inspirado en: ${nombre}
 ──────────────`
 
       await client.sendMessage(m.chat, {
-        text: texto
+        text: texto,
+        mentions: [user]
       })
 
     } catch (e) {
       console.error(e)
-      client.reply(m.chat, '❌ La poesía no quiso escribirse hoy.', m)
+      client.reply(m.chat, '❌ La poesía no salió hoy.', m)
     }
   }
 }

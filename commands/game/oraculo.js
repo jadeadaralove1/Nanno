@@ -174,9 +174,7 @@ decide actuar."
 🔮 Consulta finalizada.`
 
   await client.sendMessage(m.chat, {
-    image: {
-      url: 'https://files.catbox.moe/2ecg5m.jpg'
-    },
+    text: texto, 
     caption: texto,
     contextInfo: {
       forwardingScore: 999,
